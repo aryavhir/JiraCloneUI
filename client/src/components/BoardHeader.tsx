@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Filter, Search, MoreHorizontal, Users, Calendar, Settings, Share, Star } from 'lucide-react';
+import { Search, MoreHorizontal, Users, Settings, Share, Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -12,19 +12,25 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
 import { mockUsers, mockSprints } from '@/data/mockData';
+import FilterDropdown, { FilterOptions } from './FilterDropdown';
+import { JiraIssue } from '@shared/types';
 
 interface BoardHeaderProps {
   boardName?: string;
   sprintName?: string;
   onSearch?: (query: string) => void;
-  onFilterChange?: (filters: any) => void;
+  onFilterChange?: (filters: FilterOptions) => void;
+  filters?: FilterOptions;
+  issues?: JiraIssue[];
 }
 
 export default function BoardHeader({ 
   boardName = 'Active sprints', 
   sprintName,
   onSearch,
-  onFilterChange 
+  onFilterChange,
+  filters,
+  issues = []
 }: BoardHeaderProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isStarred, setIsStarred] = useState(false);
@@ -138,15 +144,13 @@ export default function BoardHeader({
 
           {/* Filters */}
           <div className="flex items-center space-x-2">
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => console.log('Filter clicked')}
-              data-testid="button-filter"
-            >
-              <Filter className="h-4 w-4 mr-2" />
-              Filter
-            </Button>
+            {filters && onFilterChange && (
+              <FilterDropdown 
+                filters={filters}
+                onFiltersChange={onFilterChange}
+                issues={issues}
+              />
+            )}
 
             <Button 
               variant="outline" 

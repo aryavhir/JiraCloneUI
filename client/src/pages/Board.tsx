@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import JiraHeader from '@/components/JiraHeader';
 import JiraSidebar from '@/components/JiraSidebar';
 import BoardHeader from '@/components/BoardHeader';
 import KanbanBoard from '@/components/KanbanBoard';
 import IssueModal from '@/components/IssueModal';
 import CreateIssueModal from '@/components/CreateIssueModal';
+import { FilterOptions } from '@/components/FilterDropdown';
 import { JiraIssue } from '@shared/types';
 import { mockKanbanColumns, mockProjects } from '@/data/mockData';
 
@@ -13,6 +14,16 @@ export default function Board() {
   const [columns, setColumns] = useState(mockKanbanColumns);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [createColumnId, setCreateColumnId] = useState<string | undefined>(undefined);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filters, setFilters] = useState<FilterOptions>({
+    assignees: [],
+    unassigned: false,
+    issueTypes: [],
+    priorities: [],
+    statuses: [],
+    labels: [],
+    reporters: [],
+  });
 
   const handleIssueClick = (issue: JiraIssue) => {
     console.log('Opening issue:', issue.key);
@@ -58,9 +69,80 @@ export default function Board() {
     setCreateColumnId(undefined);
   };
 
+  // Get all issues from columns for filtering
+  const allIssues = useMemo(() => {
+    return columns.flatMap(column => column.issues);
+  }, [columns]);
+
+  // Apply filters and search to issues
+  const filteredColumns = useMemo(() => {
+    return columns.map(column => ({
+      ...column,
+      issues: column.issues.filter(issue => {
+        // Search filter
+        if (searchQuery) {
+          const searchLower = searchQuery.toLowerCase();
+          const matchesSearch = 
+            issue.key.toLowerCase().includes(searchLower) ||
+            issue.summary.toLowerCase().includes(searchLower) ||
+            issue.description.toLowerCase().includes(searchLower) ||
+            issue.assignee?.name.toLowerCase().includes(searchLower) ||
+            issue.reporter.name.toLowerCase().includes(searchLower) ||
+            issue.labels.some(label => label.toLowerCase().includes(searchLower));
+          
+          if (!matchesSearch) return false;
+        }
+
+        // Assignee filter
+        if (filters.assignees.length > 0) {
+          const hasMatchingAssignee = issue.assignee && filters.assignees.includes(issue.assignee.id);
+          if (!hasMatchingAssignee) return false;
+        }
+
+        // Unassigned filter
+        if (filters.unassigned && issue.assignee) {
+          return false;
+        }
+
+        // Issue type filter
+        if (filters.issueTypes.length > 0 && !filters.issueTypes.includes(issue.type)) {
+          return false;
+        }
+
+        // Priority filter
+        if (filters.priorities.length > 0 && !filters.priorities.includes(issue.priority)) {
+          return false;
+        }
+
+        // Status filter
+        if (filters.statuses.length > 0 && !filters.statuses.includes(issue.status)) {
+          return false;
+        }
+
+        // Labels filter
+        if (filters.labels.length > 0) {
+          const hasMatchingLabel = filters.labels.some(label => issue.labels.includes(label));
+          if (!hasMatchingLabel) return false;
+        }
+
+        // Reporter filter
+        if (filters.reporters.length > 0 && !filters.reporters.includes(issue.reporter.id)) {
+          return false;
+        }
+
+        return true;
+      })
+    }));
+  }, [columns, searchQuery, filters]);
+
   const handleBoardSearch = (query: string) => {
     console.log('Searching board:', query);
-    // todo: remove mock functionality - filter issues
+    setSearchQuery(query);
+  };
+
+  const handleFilterChange = (newFilters: FilterOptions) => {
+    console.log('Filters changed:', newFilters);
+    setFilters(newFilters);
   };
 
   const handleIssueUpdate = (updates: Partial<JiraIssue>) => {
@@ -82,9 +164,14 @@ export default function Board() {
         <JiraSidebar />
         
         <main className="flex-1 flex flex-col overflow-hidden">
-          <BoardHeader onSearch={handleBoardSearch} />
+          <BoardHeader 
+            onSearch={handleBoardSearch}
+            onFilterChange={handleFilterChange}
+            filters={filters}
+            issues={allIssues}
+          />
           <KanbanBoard 
-            columns={columns}
+            columns={filteredColumns}
             onIssueMove={handleIssueMove}
             onIssueClick={handleIssueClick}
             onAddIssue={handleAddIssue}

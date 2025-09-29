@@ -11,7 +11,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { mockUsers } from '@/data/mockData';
 
-export default function JiraHeader() {
+interface JiraHeaderProps {
+  onCreateIssue?: () => void;
+}
+
+export default function JiraHeader({ onCreateIssue }: JiraHeaderProps) {
   const currentUser = mockUsers[0]; // todo: remove mock functionality
 
   const handleSearch = (query: string) => {
@@ -76,7 +80,7 @@ export default function JiraHeader() {
         <Button 
           size="sm" 
           className="bg-jira-blue hover:bg-jira-blue-dark text-white"
-          onClick={() => console.log('Create clicked')}
+          onClick={onCreateIssue || (() => console.log('Create clicked'))}
           data-testid="button-create"
         >
           <Plus className="h-4 w-4 mr-1" />

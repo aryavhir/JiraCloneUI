@@ -4,12 +4,15 @@ import JiraSidebar from '@/components/JiraSidebar';
 import BoardHeader from '@/components/BoardHeader';
 import KanbanBoard from '@/components/KanbanBoard';
 import IssueModal from '@/components/IssueModal';
+import CreateIssueModal from '@/components/CreateIssueModal';
 import { JiraIssue } from '@shared/types';
-import { mockKanbanColumns } from '@/data/mockData';
+import { mockKanbanColumns, mockProjects } from '@/data/mockData';
 
 export default function Board() {
   const [selectedIssue, setSelectedIssue] = useState<JiraIssue | null>(null);
   const [columns, setColumns] = useState(mockKanbanColumns);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [createColumnId, setCreateColumnId] = useState<string | undefined>(undefined);
 
   const handleIssueClick = (issue: JiraIssue) => {
     console.log('Opening issue:', issue.key);
@@ -23,7 +26,36 @@ export default function Board() {
 
   const handleAddIssue = (columnId: string) => {
     console.log('Add issue to column:', columnId);
-    // todo: remove mock functionality - show create issue modal
+    setCreateColumnId(columnId);
+    setShowCreateModal(true);
+  };
+
+  const handleCreateIssue = () => {
+    setCreateColumnId(undefined);
+    setShowCreateModal(true);
+  };
+
+  const handleIssueCreated = (newIssueData: Partial<JiraIssue>) => {
+    // Generate unique ID for frontend
+    const newIssue = {
+      ...newIssueData,
+      id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+    } as JiraIssue;
+
+    console.log('New issue created:', newIssue);
+
+    // Add issue to the appropriate column
+    const targetColumnId = createColumnId || '1'; // Default to "TO DO" column
+    setColumns(prevColumns =>
+      prevColumns.map(column =>
+        column.id === targetColumnId
+          ? { ...column, issues: [...column.issues, newIssue] }
+          : column
+      )
+    );
+
+    setShowCreateModal(false);
+    setCreateColumnId(undefined);
   };
 
   const handleBoardSearch = (query: string) => {
@@ -44,7 +76,7 @@ export default function Board() {
 
   return (
     <div className="h-screen bg-jira-gray-50 flex flex-col overflow-hidden">
-      <JiraHeader />
+      <JiraHeader onCreateIssue={handleCreateIssue} />
       
       <div className="flex flex-1 overflow-hidden">
         <JiraSidebar />
@@ -65,6 +97,14 @@ export default function Board() {
         isOpen={!!selectedIssue}
         onClose={() => setSelectedIssue(null)}
         onUpdate={handleIssueUpdate}
+      />
+
+      <CreateIssueModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onCreateIssue={handleIssueCreated}
+        defaultProject={mockProjects[0]}
+        defaultColumn={createColumnId}
       />
     </div>
   );

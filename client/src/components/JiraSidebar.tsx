@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useLocation, Link } from 'wouter';
 import { ChevronDown, ChevronRight, BarChart3, Settings, FolderOpen, Users, Zap, Search, Star, Clock, UserCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -9,6 +10,7 @@ interface SidebarItemProps {
   label: string;
   isActive?: boolean;
   onClick?: () => void;
+  href?: string;
   hasSubmenu?: boolean;
   isExpanded?: boolean;
   onToggle?: () => void;
@@ -21,22 +23,33 @@ function SidebarItem({
   label, 
   isActive = false, 
   onClick, 
+  href,
   hasSubmenu = false, 
   isExpanded = false, 
   onToggle, 
   children,
   testId 
 }: SidebarItemProps) {
-  return (
-    <div className="w-full">
-      <Button
-        variant="ghost"
-        onClick={hasSubmenu ? onToggle : onClick}
-        className={`w-full justify-start px-3 py-2 h-8 text-sm font-normal text-jira-gray-700 hover:bg-jira-gray-100 ${
-          isActive ? 'bg-jira-blue-light text-jira-blue border-r-2 border-jira-blue' : ''
-        }`}
-        data-testid={testId}
-      >
+  const content = (
+    <Button
+      variant="ghost"
+      onClick={hasSubmenu ? onToggle : onClick}
+      className={`w-full justify-start px-3 py-2 h-8 text-sm font-normal text-jira-gray-700 hover:bg-jira-gray-100 ${
+        isActive ? 'bg-jira-blue-light text-jira-blue border-r-2 border-jira-blue' : ''
+      }`}
+      data-testid={testId}
+      asChild={!!href && !hasSubmenu}
+    >
+      {href && !hasSubmenu ? (
+        <Link href={href}>
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center space-x-2">
+              {icon}
+              <span className="text-left">{label}</span>
+            </div>
+          </div>
+        </Link>
+      ) : (
         <div className="flex items-center justify-between w-full">
           <div className="flex items-center space-x-2">
             {icon}
@@ -52,7 +65,13 @@ function SidebarItem({
             </div>
           )}
         </div>
-      </Button>
+      )}
+    </Button>
+  );
+  
+  return (
+    <div className="w-full">
+      {content}
       {hasSubmenu && isExpanded && (
         <div className="ml-6 mt-1 space-y-1">
           {children}
@@ -63,11 +82,11 @@ function SidebarItem({
 }
 
 export default function JiraSidebar() {
+  const [location] = useLocation();
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({
     projects: true,
     filters: false
   });
-  const [activeItem, setActiveItem] = useState('board');
 
   const currentProject = mockProjects[0]; // todo: remove mock functionality
 
@@ -78,9 +97,11 @@ export default function JiraSidebar() {
     }));
   };
 
-  const handleItemClick = (item: string) => {
-    console.log(`${item} clicked`);
-    setActiveItem(item);
+  const isActive = (path: string) => {
+    if (path === '/' || path === '/board') {
+      return location === '/' || location === '/board';
+    }
+    return location === path;
   };
 
   return (
@@ -117,20 +138,22 @@ export default function JiraSidebar() {
           <SidebarItem
             icon={<BarChart3 className="h-4 w-4" />}
             label="Roadmap"
-            onClick={() => handleItemClick('roadmap')}
+            href="/roadmap"
+            isActive={isActive('/roadmap')}
             testId="nav-roadmap"
           />
           <SidebarItem
             icon={<FolderOpen className="h-4 w-4" />}
             label="Backlog"
-            onClick={() => handleItemClick('backlog')}
+            href="/backlog"
+            isActive={isActive('/backlog')}
             testId="nav-backlog"
           />
           <SidebarItem
             icon={<Zap className="h-4 w-4" />}
             label="Active sprints"
-            isActive={activeItem === 'board'}
-            onClick={() => handleItemClick('board')}
+            href="/board"
+            isActive={isActive('/board')}
             testId="nav-active-sprints"
           />
         </div>
@@ -145,13 +168,15 @@ export default function JiraSidebar() {
           <SidebarItem
             icon={<BarChart3 className="h-4 w-4" />}
             label="Code"
-            onClick={() => handleItemClick('code')}
+            href="/code"
+            isActive={isActive('/code')}
             testId="nav-code"
           />
           <SidebarItem
             icon={<UserCheck className="h-4 w-4" />}
             label="Releases"
-            onClick={() => handleItemClick('releases')}
+            href="/releases"
+            isActive={isActive('/releases')}
             testId="nav-releases"
           />
         </div>
@@ -164,7 +189,7 @@ export default function JiraSidebar() {
           <SidebarItem
             icon={<Settings className="h-4 w-4" />}
             label="Project settings"
-            onClick={() => handleItemClick('settings')}
+            onClick={() => console.log('Settings clicked')}
             testId="nav-project-settings"
           />
         </div>

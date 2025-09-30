@@ -110,12 +110,18 @@ export default function JiraHeader({ onCreateIssue }: JiraHeaderProps) {
             <DropdownMenuContent align="start" className="w-64">
               <DropdownMenuLabel>Your work</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <Link href="/board" className="w-full">Worked on</Link>
+              <DropdownMenuItem asChild>
+                <Link href="/your-work" className="w-full">Worked on</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>Viewed</DropdownMenuItem>
-              <DropdownMenuItem>Assigned to me</DropdownMenuItem>
-              <DropdownMenuItem>Starred</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/your-work" className="w-full">Viewed</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/your-work" className="w-full">Assigned to me</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/your-work" className="w-full">Starred</Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           
@@ -128,12 +134,16 @@ export default function JiraHeader({ onCreateIssue }: JiraHeaderProps) {
             <DropdownMenuContent align="start" className="w-64">
               <DropdownMenuLabel>Recent projects</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem asChild>
                 <Link href="/board" className="w-full">Project Management Tool</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>Website Redesign</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/board" className="w-full">Website Redesign</Link>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-jira-blue">View all projects</DropdownMenuItem>
+              <DropdownMenuItem className="text-jira-blue" asChild>
+                <Link href="/projects" className="w-full">View all projects</Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           
@@ -146,11 +156,19 @@ export default function JiraHeader({ onCreateIssue }: JiraHeaderProps) {
             <DropdownMenuContent align="start" className="w-64">
               <DropdownMenuLabel>Filters</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>My open issues</DropdownMenuItem>
-              <DropdownMenuItem>Reported by me</DropdownMenuItem>
-              <DropdownMenuItem>Recently updated</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/filters" className="w-full">My open issues</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/filters" className="w-full">Reported by me</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/filters" className="w-full">Recently updated</Link>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-jira-blue">View all filters</DropdownMenuItem>
+              <DropdownMenuItem className="text-jira-blue" asChild>
+                <Link href="/filters" className="w-full">View all filters</Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           
@@ -167,11 +185,19 @@ export default function JiraHeader({ onCreateIssue }: JiraHeaderProps) {
             <DropdownMenuContent align="start" className="w-64">
               <DropdownMenuLabel>Your teams</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Development Team</DropdownMenuItem>
-              <DropdownMenuItem>Design Team</DropdownMenuItem>
-              <DropdownMenuItem>Product Team</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/teams" className="w-full">Development Team</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/teams" className="w-full">Design Team</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/teams" className="w-full">Product Team</Link>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-jira-blue">Create team</DropdownMenuItem>
+              <DropdownMenuItem className="text-jira-blue" asChild>
+                <Link href="/teams" className="w-full">Create team</Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </nav>
@@ -253,24 +279,28 @@ export default function JiraHeader({ onCreateIssue }: JiraHeaderProps) {
 
         {/* Help */}
         <Button 
+          asChild
           variant="ghost" 
           size="icon" 
           className="h-8 w-8 text-jira-gray-500 hover:text-jira-gray-700 hover:bg-jira-gray-100"
-          onClick={() => console.log('Help clicked')}
           data-testid="button-help"
         >
-          <HelpCircle className="h-4 w-4" />
+          <Link href="/help">
+            <HelpCircle className="h-4 w-4" />
+          </Link>
         </Button>
 
         {/* Settings */}
         <Button 
+          asChild
           variant="ghost" 
           size="icon" 
           className="h-8 w-8 text-jira-gray-500 hover:text-jira-gray-700 hover:bg-jira-gray-100"
-          onClick={() => console.log('Settings clicked')}
           data-testid="button-settings"
         >
-          <Settings className="h-4 w-4" />
+          <Link href="/settings">
+            <Settings className="h-4 w-4" />
+          </Link>
         </Button>
 
         {/* Notifications */}
@@ -319,8 +349,10 @@ export default function JiraHeader({ onCreateIssue }: JiraHeaderProps) {
               })}
             </div>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="justify-center text-jira-blue font-medium">
-              View all notifications
+            <DropdownMenuItem className="justify-center text-jira-blue font-medium" asChild>
+              <Link href="/notifications" className="w-full text-center">
+                View all notifications
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -350,8 +382,8 @@ export default function JiraHeader({ onCreateIssue }: JiraHeaderProps) {
             <DropdownMenuItem onClick={handleProfileClick}>
               Profile
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => console.log('Settings clicked')}>
-              Settings
+            <DropdownMenuItem asChild>
+              <Link href="/settings" className="w-full">Settings</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => console.log('Logout clicked')}>

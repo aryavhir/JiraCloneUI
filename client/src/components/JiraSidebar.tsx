@@ -189,7 +189,8 @@ export default function JiraSidebar() {
           <SidebarItem
             icon={<Settings className="h-4 w-4" />}
             label="Project settings"
-            onClick={() => console.log('Settings clicked')}
+            href="/settings"
+            isActive={isActive('/settings')}
             testId="nav-project-settings"
           />
         </div>

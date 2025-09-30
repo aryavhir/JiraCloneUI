@@ -8,6 +8,7 @@ import CreateIssueModal from '@/components/CreateIssueModal';
 import { FilterOptions } from '@/components/FilterDropdown';
 import { JiraIssue } from '@shared/types';
 import { mockKanbanColumns, mockProjects } from '@/data/mockData';
+import { mockUsers } from '@/data/mockData';
 
 export default function Board() {
   const [selectedIssue, setSelectedIssue] = useState<JiraIssue | null>(null);
@@ -47,13 +48,36 @@ export default function Board() {
   };
 
   const handleIssueCreated = (newIssueData: Partial<JiraIssue>) => {
-    // Generate unique ID for frontend
-    const newIssue = {
-      ...newIssueData,
+    // Map modal output to JiraIssue shape
+    type ModalIssue = {
+      summary: string;
+      description: string;
+      type: string;
+      priority: string;
+      assignee: string;
+      storyPoints?: number;
+    };
+    const modalData = newIssueData as ModalIssue;
+    const assigneeObj = mockUsers.find((u: any) => u.id === modalData.assignee || u.name === modalData.assignee);
+    const reporterObj = mockUsers[0]; // Default to first user for demo
+    const projectObj = mockProjects[0]; // Default to first project for demo
+    const newIssue: JiraIssue = {
       id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
-    } as JiraIssue;
-
-    console.log('New issue created:', newIssue);
+      key: projectObj.key + '-' + (Math.floor(Math.random() * 1000) + 1),
+      summary: modalData.summary || '',
+      description: modalData.description || '',
+      type: modalData.type as any || 'task',
+      priority: modalData.priority as any || 'medium',
+      status: createColumnId === '1' ? 'to-do' : createColumnId === '2' ? 'in-progress' : 'to-do',
+      assignee: assigneeObj,
+      reporter: reporterObj,
+      project: projectObj,
+      storyPoints: modalData.storyPoints,
+      labels: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      comments: []
+    };
 
     // Add issue to the appropriate column
     const targetColumnId = createColumnId || '1'; // Default to "TO DO" column
@@ -187,9 +211,9 @@ export default function Board() {
       />
 
       <CreateIssueModal
-        isOpen={showCreateModal}
+        open={showCreateModal}
         onClose={() => setShowCreateModal(false)}
-        onCreateIssue={handleIssueCreated}
+        onSubmit={handleIssueCreated}
         defaultProject={mockProjects[0]}
         defaultColumn={createColumnId}
       />

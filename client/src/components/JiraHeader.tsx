@@ -1,4 +1,5 @@
 import { Search, Bell, HelpCircle, Settings, Plus } from 'lucide-react';
+import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -53,8 +54,8 @@ export default function JiraHeader({ onCreateIssue }: JiraHeaderProps) {
           <Button variant="ghost" size="sm" className="text-jira-gray-700 hover:text-jira-blue hover:bg-jira-blue-light">
             Filters
           </Button>
-          <Button variant="ghost" size="sm" className="text-jira-gray-700 hover:text-jira-blue hover:bg-jira-blue-light">
-            Dashboards
+          <Button asChild variant="ghost" size="sm" className="text-jira-gray-700 hover:text-jira-blue hover:bg-jira-blue-light">
+            <Link href="/dashboard">Dashboards</Link>
           </Button>
           <Button variant="ghost" size="sm" className="text-jira-gray-700 hover:text-jira-blue hover:bg-jira-blue-light">
             Teams

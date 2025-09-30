@@ -156,56 +156,8 @@ export default function JiraSidebar() {
           />
         </div>
 
-        {/* Shortcuts */}
-        <div className="mb-4">
-          <SidebarItem
-            icon={<Star className="h-4 w-4 text-yellow-500" />}
-            label="Your shortcuts"
-            hasSubmenu
-            isExpanded={expandedItems.shortcuts}
-            onToggle={() => toggleExpanded('shortcuts')}
-            testId="nav-shortcuts"
-          >
-            <Button
-              variant="ghost"
-              onClick={() => handleItemClick('my-open-issues')}
-              className="w-full justify-start px-2 py-1 h-7 text-xs text-jira-gray-600 hover:bg-jira-gray-50"
-              data-testid="nav-my-open-issues"
-            >
-              My open issues
-            </Button>
-          </SidebarItem>
-        </div>
 
-        {/* Filters */}
-        <div className="mb-4">
-          <SidebarItem
-            icon={<Search className="h-4 w-4" />}
-            label="Filters"
-            hasSubmenu
-            isExpanded={expandedItems.filters}
-            onToggle={() => toggleExpanded('filters')}
-            testId="nav-filters"
-          >
-            <Button
-              variant="ghost"
-              onClick={() => handleItemClick('recently-viewed')}
-              className="w-full justify-start px-2 py-1 h-7 text-xs text-jira-gray-600 hover:bg-jira-gray-50"
-              data-testid="nav-recently-viewed"
-            >
-              <Clock className="h-3 w-3 mr-2" />
-              Recently viewed
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={() => handleItemClick('viewed-by-me')}
-              className="w-full justify-start px-2 py-1 h-7 text-xs text-jira-gray-600 hover:bg-jira-gray-50"
-              data-testid="nav-viewed-by-me"
-            >
-              Viewed by me
-            </Button>
-          </SidebarItem>
-        </div>
+        
 
         {/* Project Settings */}
         <div className="pt-4 border-t border-jira-gray-200">

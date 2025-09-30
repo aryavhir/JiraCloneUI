@@ -29,23 +29,30 @@ export default function Backlog() {
     setShowCreateModal(true);
   };
 
-  const handleIssueCreated = (newIssueData: Partial<JiraIssue>) => {
+  const handleIssueCreated = (newIssueData: {
+    summary: string;
+    description: string;
+    type: string;
+    priority: string;
+    assignee: string;
+    storyPoints?: number;
+  }) => {
     const assigneeObj = mockUsers.find((u: any) => u.id === newIssueData.assignee || u.name === newIssueData.assignee);
     const reporterObj = mockUsers[0];
     const projectObj = mockProjects[0];
     const newIssue: JiraIssue = {
       id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
       key: projectObj.key + '-' + (Math.floor(Math.random() * 1000) + 1),
-      summary: newIssueData.summary || '',
-      description: newIssueData.description || '',
-      type: newIssueData.type as any || 'task',
-      priority: newIssueData.priority as any || 'medium',
+      summary: newIssueData.summary,
+      description: newIssueData.description,
+      type: newIssueData.type as any,
+      priority: newIssueData.priority as any,
       status: 'to-do',
       assignee: assigneeObj,
       reporter: reporterObj,
       project: projectObj,
       storyPoints: newIssueData.storyPoints,
-      labels: newIssueData.labels || [],
+      labels: [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       comments: []
@@ -177,7 +184,7 @@ export default function Backlog() {
                     {backlogOnlyIssues.length === 0 ? (
                       <div className="text-center py-8 text-jira-gray-500">
                         <p className="text-sm">Your backlog is empty</p>
-                        <Button variant="link" onClick={handleCreateIssue} className="mt-2">Create an issue</Button>
+                        <Button variant="ghost" onClick={handleCreateIssue} className="mt-2 text-jira-blue">Create an issue</Button>
                       </div>
                     ) : (
                       backlogOnlyIssues.map(issue => (
@@ -228,7 +235,6 @@ export default function Backlog() {
         open={showCreateModal}
         onClose={() => setShowCreateModal(false)}
         onSubmit={handleIssueCreated}
-        defaultProject={mockProjects[0]}
       />
     </div>
   );

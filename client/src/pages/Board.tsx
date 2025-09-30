@@ -47,17 +47,15 @@ export default function Board() {
     setShowCreateModal(true);
   };
 
-  const handleIssueCreated = (newIssueData: Partial<JiraIssue>) => {
-    // Map modal output to JiraIssue shape
-    type ModalIssue = {
-      summary: string;
-      description: string;
-      type: string;
-      priority: string;
-      assignee: string;
-      storyPoints?: number;
-    };
-    const modalData = newIssueData as ModalIssue;
+  const handleIssueCreated = (newIssueData: {
+    summary: string;
+    description: string;
+    type: string;
+    priority: string;
+    assignee: string;
+    storyPoints?: number;
+  }) => {
+    const modalData = newIssueData;
     const assigneeObj = mockUsers.find((u: any) => u.id === modalData.assignee || u.name === modalData.assignee);
     const reporterObj = mockUsers[0]; // Default to first user for demo
     const projectObj = mockProjects[0]; // Default to first project for demo
@@ -214,8 +212,6 @@ export default function Board() {
         open={showCreateModal}
         onClose={() => setShowCreateModal(false)}
         onSubmit={handleIssueCreated}
-        defaultProject={mockProjects[0]}
-        defaultColumn={createColumnId}
       />
     </div>
   );

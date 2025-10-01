@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { X, ArrowUp, ArrowDown, Minus, Bug, CheckSquare, BookOpen, Zap, Paperclip, MessageSquare, User, Calendar, Tag, MoreHorizontal } from 'lucide-react';
+import { X, ArrowUp, ArrowDown, Minus, Bug, CheckSquare, BookOpen, Zap, Paperclip, MessageSquare, User, Calendar, Tag, MoreHorizontal, Plus } from 'lucide-react';
+import { mockUsers } from '@/data/mockData';
 import {
   Dialog,
   DialogContent,
@@ -73,7 +74,24 @@ export default function IssueModal({ issue, isOpen, onClose, onUpdate }: IssueMo
   const handleAddComment = () => {
     if (newComment.trim()) {
       console.log('Adding comment:', newComment);
-      // todo: remove mock functionality - handle comment creation
+      
+      const newCommentObj = {
+        id: Date.now().toString(),
+        author: {
+          id: 'current-user',
+          name: 'You',
+          email: 'you@company.com',
+          initials: 'YU'
+        },
+        body: newComment.trim(),
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+      
+      onUpdate?.({ 
+        comments: [...issue.comments, newCommentObj] 
+      });
+      
       setNewComment('');
     }
   };
@@ -97,15 +115,7 @@ export default function IssueModal({ issue, isOpen, onClose, onUpdate }: IssueMo
               {issue.key}
             </span>
           </div>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={onClose}
-            className="h-8 w-8"
-            data-testid="button-close-modal"
-          >
-            <X className="h-4 w-4" />
-          </Button>
+      
         </DialogHeader>
 
         <div className="flex">
@@ -259,26 +269,61 @@ export default function IssueModal({ issue, isOpen, onClose, onUpdate }: IssueMo
               <label className="text-xs font-medium text-jira-gray-500 uppercase tracking-wide mb-2 block">
                 Assignee
               </label>
-              <div className="flex items-center space-x-2 p-2 rounded border border-jira-gray-200 bg-white hover:bg-jira-gray-50 cursor-pointer" data-testid="field-assignee">
-                {issue.assignee ? (
-                  <>
-                    <Avatar className="h-6 w-6">
-                      <AvatarImage src={issue.assignee.avatarUrl} alt={issue.assignee.name} />
-                      <AvatarFallback className="bg-jira-blue text-white text-xs font-medium">
-                        {issue.assignee.initials}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className="text-sm text-jira-gray-900">{issue.assignee.name}</span>
-                  </>
-                ) : (
-                  <>
-                    <div className="w-6 h-6 rounded-full bg-jira-gray-200 flex items-center justify-center">
-                      <User className="h-3 w-3 text-jira-gray-500" />
+              <Select 
+                value={issue.assignee?.id || 'unassigned'} 
+                onValueChange={(value) => {
+                  if (value === 'unassigned') {
+                    handleFieldChange('assignee', undefined);
+                  } else {
+                    const user = mockUsers.find(u => u.id === value);
+                    handleFieldChange('assignee', user);
+                  }
+                }}
+              >
+                <SelectTrigger className="w-full" data-testid="select-assignee">
+                  <SelectValue>
+                    <div className="flex items-center space-x-2">
+                      {issue.assignee ? (
+                        <>
+                          <Avatar className="h-5 w-5">
+                            <AvatarImage src={issue.assignee.avatarUrl} alt={issue.assignee.name} />
+                            <AvatarFallback className="bg-jira-blue text-white text-xs">
+                              {issue.assignee.initials}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className="text-sm">{issue.assignee.name}</span>
+                        </>
+                      ) : (
+                        <>
+                          <User className="h-4 w-4 text-jira-gray-500" />
+                          <span className="text-sm text-jira-gray-500">Unassigned</span>
+                        </>
+                      )}
                     </div>
-                    <span className="text-sm text-jira-gray-500">Unassigned</span>
-                  </>
-                )}
-              </div>
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="unassigned">
+                    <div className="flex items-center space-x-2">
+                      <User className="h-4 w-4 text-jira-gray-500" />
+                      <span>Unassigned</span>
+                    </div>
+                  </SelectItem>
+                  {mockUsers.map((user) => (
+                    <SelectItem key={user.id} value={user.id}>
+                      <div className="flex items-center space-x-2">
+                        <Avatar className="h-5 w-5">
+                          <AvatarImage src={user.avatarUrl} alt={user.name} />
+                          <AvatarFallback className="bg-jira-blue text-white text-xs">
+                            {user.initials}
+                          </AvatarFallback>
+                        </Avatar>
+                        <span>{user.name}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div>
@@ -317,15 +362,7 @@ export default function IssueModal({ issue, isOpen, onClose, onUpdate }: IssueMo
                     {label}
                   </Badge>
                 ))}
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="h-6 px-2 text-xs text-jira-gray-500 hover:text-jira-blue"
-                  onClick={() => console.log('Add label clicked')}
-                  data-testid="button-add-label"
-                >
-                  + Add
-                </Button>
+              
               </div>
             </div>
 

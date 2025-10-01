@@ -147,30 +147,7 @@ export default function JiraHeader({ onCreateIssue }: JiraHeaderProps) {
             </DropdownMenuContent>
           </DropdownMenu>
           
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="text-jira-gray-700 hover:text-jira-blue hover:bg-jira-blue-light">
-                Filters
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-64">
-              <DropdownMenuLabel>Filters</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link href="/filters" className="w-full">My open issues</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/filters" className="w-full">Reported by me</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/filters" className="w-full">Recently updated</Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-jira-blue" asChild>
-                <Link href="/filters" className="w-full">View all filters</Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+        
           
           <Button asChild variant="ghost" size="sm" className="text-jira-gray-700 hover:text-jira-blue hover:bg-jira-blue-light">
             <Link href="/dashboard">Dashboards</Link>
@@ -205,77 +182,9 @@ export default function JiraHeader({ onCreateIssue }: JiraHeaderProps) {
 
       {/* Right section */}
       <div className="flex items-center space-x-2">
-        {/* Search */}
-        <div className="relative hidden sm:block">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-jira-gray-400 h-4 w-4 z-10" />
-          <Input
-            type="search"
-            placeholder="Search"
-            value={searchQuery}
-            className="pl-10 pr-4 py-2 w-64 h-8 bg-jira-gray-50 border-jira-gray-200 focus:border-jira-blue focus:ring-jira-blue text-sm"
-            onChange={(e) => handleSearch(e.target.value)}
-            onFocus={() => searchQuery.length > 0 && setSearchOpen(true)}
-            onBlur={() => setTimeout(() => setSearchOpen(false), 200)}
-            data-testid="input-search"
-          />
-          {searchOpen && searchResults.length > 0 && (
-            <div className="absolute top-full mt-2 w-96 bg-white border border-jira-gray-200 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto">
-              <div className="p-2">
-                {searchResults.map((result, idx) => {
-                  const prevCategory = idx > 0 ? searchResults[idx - 1].category : null;
-                  const showCategory = result.category !== prevCategory;
-                  const resultKey = `search-result-${idx}`;
-                  
-                  return (
-                    <div key={resultKey}>
-                      {showCategory && (
-                        <div className="px-2 py-1 text-xs font-semibold text-jira-gray-500 uppercase tracking-wide mt-2 first:mt-0">
-                          {result.category}
-                        </div>
-                      )}
-                      <div
-                        className="px-3 py-2 hover:bg-jira-gray-50 rounded cursor-pointer flex items-center gap-3"
-                        onClick={() => {
-                          if (result.type === 'page' && 'path' in result) {
-                            window.location.href = result.path;
-                          }
-                          setSearchOpen(false);
-                          setSearchQuery('');
-                        }}
-                      >
-                        {result.type === 'issue' ? (
-                          <>
-                            <MessageSquare className="h-4 w-4 text-blue-500" />
-                            <div>
-                              <div className="text-sm font-medium text-jira-gray-900">{result.title}</div>
-                              {'key' in result && <div className="text-xs text-jira-gray-500">{result.key}</div>}
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <Search className="h-4 w-4 text-jira-gray-500" />
-                            <div className="text-sm text-jira-gray-900">{result.title}</div>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-        </div>
+      
 
-        {/* Create button */}
-        <Button 
-          size="sm" 
-          className="bg-jira-blue hover:bg-jira-blue-dark text-white"
-          onClick={onCreateIssue || (() => console.log('Create clicked'))}
-          data-testid="button-create"
-        >
-          <Plus className="h-4 w-4 mr-1" />
-          Create
-        </Button>
+    
 
         {/* Help */}
         <Button 
@@ -386,9 +295,7 @@ export default function JiraHeader({ onCreateIssue }: JiraHeaderProps) {
               <Link href="/settings" className="w-full">Settings</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => console.log('Logout clicked')}>
-              Log out
-            </DropdownMenuItem>
+
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

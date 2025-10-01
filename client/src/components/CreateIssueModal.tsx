@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Bug, CheckSquare, Square, Zap } from "lucide-react";
+import { mockUsers } from "@/data/mockData";
 
 interface CreateIssueModalProps {
   open: boolean;
@@ -47,11 +48,11 @@ const priorities = [
   { value: "highest", label: "Highest" },
 ];
 
-const assignees = [
-  { value: "john-doe", label: "John Doe" },
-  { value: "jane-smith", label: "Jane Smith" },
-  { value: "bob-johnson", label: "Bob Johnson" },
-];
+// Use mockUsers for assignee options
+const assignees = mockUsers.map(user => ({
+  value: user.id,
+  label: user.name
+}));
 
 export default function CreateIssueModal({ open, onClose, onSubmit }: CreateIssueModalProps) {
   const [formData, setFormData] = useState({

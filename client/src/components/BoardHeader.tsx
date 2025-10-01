@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, MoreHorizontal, Users, Settings, Share, Star } from 'lucide-react';
+import { Search, MoreHorizontal, Users, Settings, Share, Star, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -22,6 +22,7 @@ interface BoardHeaderProps {
   onFilterChange?: (filters: FilterOptions) => void;
   filters?: FilterOptions;
   issues?: JiraIssue[];
+  onCreateIssue?: () => void;
 }
 
 export default function BoardHeader({ 
@@ -30,7 +31,8 @@ export default function BoardHeader({
   onSearch,
   onFilterChange,
   filters,
-  issues = []
+  issues = [],
+  onCreateIssue
 }: BoardHeaderProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isStarred, setIsStarred] = useState(false);
@@ -68,38 +70,7 @@ export default function BoardHeader({
           </Button>
         </div>
 
-        <div className="flex items-center space-x-2">
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => console.log('Share clicked')}
-            data-testid="button-share"
-          >
-            <Share className="h-4 w-4 mr-2" />
-            Share
-          </Button>
-          
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8" data-testid="button-board-menu">
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => console.log('Configure board clicked')}>
-                <Settings className="h-4 w-4 mr-2" />
-                Configure board
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => console.log('Export clicked')}>
-                Export
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => console.log('Print clicked')}>
-                Print
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+      
       </div>
 
       {/* Sprint info */}
@@ -151,16 +122,21 @@ export default function BoardHeader({
                 issues={issues}
               />
             )}
+            
+            {/* Create Issue Button */}
+            {onCreateIssue && (
+              <Button 
+                onClick={onCreateIssue}
+                size="sm"
+                className="bg-jira-blue hover:bg-jira-blue-dark text-white"
+                data-testid="button-create-issue"
+              >
+                <Plus className="h-4 w-4 mr-1" />
+                Create
+              </Button>
+            )}
 
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={() => console.log('People filter clicked')}
-              data-testid="button-people-filter"
-            >
-              <Users className="h-4 w-4 mr-2" />
-              People
-            </Button>
+         
           </div>
         </div>
 

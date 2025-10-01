@@ -3,6 +3,7 @@ import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { WorkflowProvider } from "@/contexts/WorkflowContext";
 import Board from "@/pages/Board";
 import Dashboard from "@/pages/Dashboard";
 import Backlog from "@/pages/Backlog";
@@ -44,8 +45,10 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Router />
+        <WorkflowProvider>
+          <Toaster />
+          <Router />
+        </WorkflowProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );

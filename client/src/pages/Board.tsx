@@ -7,12 +7,13 @@ import IssueModal from '@/components/IssueModal';
 import CreateIssueModal from '@/components/CreateIssueModal';
 import { FilterOptions } from '@/components/FilterDropdown';
 import { JiraIssue } from '@shared/types';
-import { mockKanbanColumns, mockProjects } from '@/data/mockData';
+import { mockProjects } from '@/data/mockData';
 import { mockUsers } from '@/data/mockData';
+import { useWorkflow } from '@/contexts/WorkflowContext';
 
 export default function Board() {
   const [selectedIssue, setSelectedIssue] = useState<JiraIssue | null>(null);
-  const [columns, setColumns] = useState(mockKanbanColumns);
+  const { columns, setColumns } = useWorkflow();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [createColumnId, setCreateColumnId] = useState<string | undefined>(undefined);
   const [searchQuery, setSearchQuery] = useState('');
@@ -33,7 +34,35 @@ export default function Board() {
 
   const handleIssueMove = (issueId: string, fromStatus: any, toStatus: any) => {
     console.log(`Issue ${issueId} moved from ${fromStatus} to ${toStatus}`);
-    // todo: remove mock functionality - update issue status
+    
+    // Update the columns state with the moved issue
+    setColumns(prevColumns => {
+      let movedIssue: JiraIssue | null = null;
+      
+      // Find and remove the issue from the source column
+      const updatedColumns = prevColumns.map(column => {
+        if (column.status === fromStatus) {
+          const issue = column.issues.find(i => i.id === issueId);
+          if (issue) {
+            movedIssue = { ...issue, status: toStatus };
+            return { ...column, issues: column.issues.filter(i => i.id !== issueId) };
+          }
+        }
+        return column;
+      });
+      
+      // Add the issue to the destination column
+      if (movedIssue) {
+        return updatedColumns.map(column => {
+          if (column.status === toStatus) {
+            return { ...column, issues: [...column.issues, movedIssue!] };
+          }
+          return column;
+        });
+      }
+      
+      return updatedColumns;
+    });
   };
 
   const handleAddIssue = (columnId: string) => {
@@ -59,6 +88,15 @@ export default function Board() {
     const assigneeObj = mockUsers.find((u: any) => u.id === modalData.assignee || u.name === modalData.assignee);
     const reporterObj = mockUsers[0]; // Default to first user for demo
     const projectObj = mockProjects[0]; // Default to first project for demo
+    
+    // Determine the target column and status
+    const targetColumnId = createColumnId || '1'; // Default to "TO DO" column
+    let targetStatus: 'to-do' | 'in-progress' | 'done' = 'to-do';
+    
+    if (targetColumnId === '1') targetStatus = 'to-do';
+    else if (targetColumnId === '2') targetStatus = 'in-progress';
+    else if (targetColumnId === '3') targetStatus = 'done';
+    
     const newIssue: JiraIssue = {
       id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
       key: projectObj.key + '-' + (Math.floor(Math.random() * 1000) + 1),
@@ -66,7 +104,7 @@ export default function Board() {
       description: modalData.description || '',
       type: modalData.type as any || 'task',
       priority: modalData.priority as any || 'medium',
-      status: createColumnId === '1' ? 'to-do' : createColumnId === '2' ? 'in-progress' : 'to-do',
+      status: targetStatus,
       assignee: assigneeObj,
       reporter: reporterObj,
       project: projectObj,
@@ -78,7 +116,6 @@ export default function Board() {
     };
 
     // Add issue to the appropriate column
-    const targetColumnId = createColumnId || '1'; // Default to "TO DO" column
     setColumns(prevColumns =>
       prevColumns.map(column =>
         column.id === targetColumnId
@@ -115,15 +152,21 @@ export default function Board() {
           if (!matchesSearch) return false;
         }
 
-        // Assignee filter
-        if (filters.assignees.length > 0) {
-          const hasMatchingAssignee = issue.assignee && filters.assignees.includes(issue.assignee.id);
-          if (!hasMatchingAssignee) return false;
-        }
-
-        // Unassigned filter
-        if (filters.unassigned && issue.assignee) {
-          return false;
+        // Assignee and Unassigned filter
+        if (filters.assignees.length > 0 || filters.unassigned) {
+          let matchesAssignee = false;
+          
+          // Check if matches specific assignees
+          if (filters.assignees.length > 0 && issue.assignee && filters.assignees.includes(issue.assignee.id)) {
+            matchesAssignee = true;
+          }
+          
+          // Check if matches unassigned filter
+          if (filters.unassigned && !issue.assignee) {
+            matchesAssignee = true;
+          }
+          
+          if (!matchesAssignee) return false;
         }
 
         // Issue type filter
@@ -171,9 +214,51 @@ export default function Board() {
     if (!selectedIssue) return;
     
     console.log('Updating issue:', selectedIssue.key, updates);
-    // todo: remove mock functionality - update issue in backend
     
-    // Update local state for demo purposes
+    // Check if status is being updated (which means moving between columns)
+    if (updates.status && updates.status !== selectedIssue.status) {
+      setColumns(prevColumns => {
+        let issueToMove: JiraIssue | null = null;
+        
+        // Remove from current column and update the issue
+        const columnsAfterRemoval = prevColumns.map(column => {
+          if (column.issues.find(i => i.id === selectedIssue.id)) {
+            const issue = column.issues.find(i => i.id === selectedIssue.id);
+            if (issue) {
+              issueToMove = { ...issue, ...updates };
+              return { ...column, issues: column.issues.filter(i => i.id !== selectedIssue.id) };
+            }
+          }
+          return column;
+        });
+        
+        // Add to new column
+        if (issueToMove) {
+          return columnsAfterRemoval.map(column => {
+            if (column.status === updates.status) {
+              return { ...column, issues: [...column.issues, issueToMove!] };
+            }
+            return column;
+          });
+        }
+        
+        return columnsAfterRemoval;
+      });
+    } else {
+      // Update issue in place (no status change)
+      setColumns(prevColumns => 
+        prevColumns.map(column => ({
+          ...column,
+          issues: column.issues.map(issue => 
+            issue.id === selectedIssue.id 
+              ? { ...issue, ...updates }
+              : issue
+          )
+        }))
+      );
+    }
+    
+    // Update local state for the modal
     const updatedIssue = { ...selectedIssue, ...updates };
     setSelectedIssue(updatedIssue);
   };
@@ -191,6 +276,7 @@ export default function Board() {
             onFilterChange={handleFilterChange}
             filters={filters}
             issues={allIssues}
+            onCreateIssue={handleCreateIssue}
           />
           <KanbanBoard 
             columns={filteredColumns}

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DndContext, DragOverlay, closestCenter, DragStartEvent, DragEndEvent } from '@dnd-kit/core';
+import { DndContext, DragOverlay, closestCenter, DragStartEvent, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -35,9 +35,12 @@ function SortableIssueCard({ issue, onClick }: SortableIssueCardProps) {
       style={style}
       {...attributes}
       {...listeners}
-      className="cursor-grab active:cursor-grabbing"
     >
-      <IssueCard issue={issue} onClick={onClick} isDragging={isDragging} />
+      <IssueCard 
+        issue={issue} 
+        onClick={onClick} 
+        isDragging={isDragging}
+      />
     </div>
   );
 }
@@ -51,9 +54,21 @@ interface KanbanColumnComponentProps {
 function KanbanColumnComponent({ column, onAddIssue, onIssueClick }: KanbanColumnComponentProps) {
   const issueCount = column.issues.length;
   const isOverLimit = column.limit && issueCount > column.limit;
+  
+  const { setNodeRef } = useSortable({
+    id: column.id,
+    data: {
+      type: 'column',
+      column
+    }
+  });
 
   return (
-    <Card className="bg-jira-gray-50 border-jira-gray-200 min-h-96 flex flex-col" data-testid={`column-${column.status}`}>
+    <Card 
+      ref={setNodeRef}
+      className="bg-jira-gray-50 border-jira-gray-200 min-h-96 flex flex-col" 
+      data-testid={`column-${column.status}`}
+    >
       {/* Column Header */}
       <div className="p-3 border-b border-jira-gray-200 bg-white">
         <div className="flex items-center justify-between">
@@ -122,8 +137,17 @@ interface KanbanBoardProps {
 }
 
 export default function KanbanBoard({ columns: initialColumns, onIssueMove, onIssueClick, onAddIssue }: KanbanBoardProps) {
-  const [columns, setColumns] = useState(initialColumns);
   const [activeIssue, setActiveIssue] = useState<JiraIssue | null>(null);
+
+  // Configure pointer sensor with distance threshold
+  // This allows clicks to work while requiring a small drag distance to start dragging
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8, // Require 8px movement before drag starts
+      },
+    })
+  );
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event;
@@ -141,7 +165,12 @@ export default function KanbanBoard({ columns: initialColumns, onIssueMove, onIs
     const overId = over.id as string;
 
     // Find which column the issue is being dropped into
-    const overColumn = findColumnByIssueId(overId) || findColumnById(overId);
+    // Check if dropped on a column directly or on an issue within a column
+    let overColumn = findColumnById(overId);
+    if (!overColumn) {
+      overColumn = findColumnByIssueId(overId);
+    }
+    
     if (!overColumn) return;
 
     const activeIssue = findIssueById(activeIssueId);
@@ -150,40 +179,16 @@ export default function KanbanBoard({ columns: initialColumns, onIssueMove, onIs
     const activeColumn = findColumnByIssueId(activeIssueId);
     if (!activeColumn) return;
 
-    // If dropped in the same column, reorder
-    if (activeColumn.id === overColumn.id) {
-      const issueIds = activeColumn.issues.map(issue => issue.id);
-      const oldIndex = issueIds.indexOf(activeIssueId);
-      const newIndex = issueIds.indexOf(overId);
-
-      if (oldIndex !== newIndex) {
-        const newIssueOrder = arrayMove(activeColumn.issues, oldIndex, newIndex);
-        setColumns(prev => prev.map(col => 
-          col.id === activeColumn.id 
-            ? { ...col, issues: newIssueOrder }
-            : col
-        ));
-      }
-    } else {
-      // Move to different column
-      setColumns(prev => prev.map(col => {
-        if (col.id === activeColumn.id) {
-          return { ...col, issues: col.issues.filter(issue => issue.id !== activeIssueId) };
-        }
-        if (col.id === overColumn.id) {
-          const updatedIssue = { ...activeIssue, status: overColumn.status };
-          return { ...col, issues: [...col.issues, updatedIssue] };
-        }
-        return col;
-      }));
-
+    // Only handle drag and drop - don't maintain local state
+    // The parent component will handle the state update
+    if (activeColumn.id !== overColumn.id) {
       console.log(`Issue moved: ${activeIssueId} from ${activeColumn.status} to ${overColumn.status}`);
       onIssueMove?.(activeIssueId, activeColumn.status, overColumn.status);
     }
   };
 
   const findIssueById = (id: string): JiraIssue | null => {
-    for (const column of columns) {
+    for (const column of initialColumns) {
       const issue = column.issues.find(issue => issue.id === id);
       if (issue) return issue;
     }
@@ -191,13 +196,13 @@ export default function KanbanBoard({ columns: initialColumns, onIssueMove, onIs
   };
 
   const findColumnByIssueId = (issueId: string): KanbanColumn | null => {
-    return columns.find(column => 
+    return initialColumns.find(column => 
       column.issues.some(issue => issue.id === issueId)
     ) || null;
   };
 
   const findColumnById = (id: string): KanbanColumn | null => {
-    return columns.find(column => column.id === id) || null;
+    return initialColumns.find(column => column.id === id) || null;
   };
 
   const handleIssueClick = (issue: JiraIssue) => {
@@ -210,24 +215,33 @@ export default function KanbanBoard({ columns: initialColumns, onIssueMove, onIs
     onAddIssue?.(columnId);
   };
 
+  // Get all sortable IDs (issues + columns)
+  const sortableIds = [
+    ...initialColumns.map(col => col.id),
+    ...initialColumns.flatMap(col => col.issues.map(issue => issue.id))
+  ];
+
   return (
-    <div className="flex-1 p-6" data-testid="kanban-board">
+    <div className="flex-1 overflow-x-auto overflow-y-hidden" data-testid="kanban-board">
       <DndContext
+        sensors={sensors}
         collisionDetection={closestCenter}
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <div className="flex space-x-6 min-h-full">
-          {columns.map((column) => (
-            <div key={column.id} className="flex-1 min-w-80">
-              <KanbanColumnComponent
-                column={column}
-                onAddIssue={handleAddIssue}
-                onIssueClick={handleIssueClick}
-              />
-            </div>
-          ))}
-        </div>
+        <SortableContext items={sortableIds} strategy={verticalListSortingStrategy}>
+          <div className="flex space-x-6 min-h-full p-6" style={{ minWidth: `${initialColumns.length * 360}px` }}>
+            {initialColumns.map((column) => (
+              <div key={column.id} className="flex-shrink-0 w-80">
+                <KanbanColumnComponent
+                  column={column}
+                  onAddIssue={handleAddIssue}
+                  onIssueClick={handleIssueClick}
+                />
+              </div>
+            ))}
+          </div>
+        </SortableContext>
 
         <DragOverlay>
           {activeIssue && (

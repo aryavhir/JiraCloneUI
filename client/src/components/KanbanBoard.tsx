@@ -66,11 +66,11 @@ function KanbanColumnComponent({ column, onAddIssue, onIssueClick }: KanbanColum
   return (
     <Card 
       ref={setNodeRef}
-      className="bg-jira-gray-50 border-jira-gray-200 min-h-96 flex flex-col" 
+      className="bg-jira-gray-50 border-jira-gray-200 h-full flex flex-col" 
       data-testid={`column-${column.status}`}
     >
       {/* Column Header */}
-      <div className="p-3 border-b border-jira-gray-200 bg-white">
+      <div className="p-3 border-b border-jira-gray-200 bg-white flex-shrink-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <h3 className="text-xs font-semibold text-jira-gray-600 uppercase tracking-wide" data-testid={`text-column-title-${column.id}`}>
@@ -222,7 +222,7 @@ export default function KanbanBoard({ columns: initialColumns, onIssueMove, onIs
   ];
 
   return (
-    <div className="flex-1 overflow-x-auto overflow-y-hidden" data-testid="kanban-board">
+    <div className="flex-1 overflow-x-auto overflow-y-auto" data-testid="kanban-board">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -230,9 +230,9 @@ export default function KanbanBoard({ columns: initialColumns, onIssueMove, onIs
         onDragEnd={handleDragEnd}
       >
         <SortableContext items={sortableIds} strategy={verticalListSortingStrategy}>
-          <div className="flex space-x-6 min-h-full p-6" style={{ minWidth: `${initialColumns.length * 360}px` }}>
+          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 lg:space-x-6 min-h-full p-2 sm:p-6 sm:min-w-max">
             {initialColumns.map((column) => (
-              <div key={column.id} className="flex-shrink-0 w-80">
+              <div key={column.id} className="flex-shrink-0 w-full sm:w-72 lg:w-80 max-w-full">
                 <KanbanColumnComponent
                   column={column}
                   onAddIssue={handleAddIssue}

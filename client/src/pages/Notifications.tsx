@@ -22,52 +22,103 @@ interface Notification {
 const mockNotifications: Notification[] = [
   {
     id: '1',
-    type: 'comment',
-    title: 'New comment on PROJ-1',
-    message: 'Mike Chen commented: "Started working on the Google OAuth integration"',
+    type: 'complete',
+    title: 'Google Cybersecurity Certificate Completed!',
+    message: 'Successfully completed the Google Cybersecurity Professional Certificate and received Credly badge',
     time: '2 hours ago',
     read: false,
-    issueKey: 'PROJ-1',
-    icon: MessageSquare,
+    issueKey: 'CYBER-1',
+    icon: CheckCircle,
   },
   {
     id: '2',
-    type: 'pr',
-    title: 'Pull request approved',
-    message: 'Your pull request #42 has been approved by Sarah Johnson',
+    type: 'complete',
+    title: 'OpenRTB Ad Banner Deployed',
+    message: 'Your JavaScript ad banner with impression tracking is now live on Hydro Online platform',
     time: '5 hours ago',
     read: false,
-    icon: GitPullRequest,
+    issueKey: 'HYDRO-1',
+    icon: CheckCircle,
   },
   {
     id: '3',
-    type: 'assigned',
-    title: 'Issue assigned to you',
-    message: 'PROJ-3 "Database connection timeout" was assigned to you',
+    type: 'issue',
+    title: 'Security Audit Completed',
+    message: 'Vulnerability assessment for Hydro Online platform completed. 3 medium-risk issues identified and resolved',
     time: '1 day ago',
     read: true,
-    issueKey: 'PROJ-3',
+    issueKey: 'HYDRO-5',
     icon: AlertCircle,
   },
   {
     id: '4',
     type: 'complete',
-    title: 'Issue completed',
-    message: 'PROJ-2 was moved to Done by Jessica Williams',
+    title: 'Blockchain Voting App Published',
+    message: 'Your Solidity smart contract voting system is now deployed on Sepolia ETH testnet',
     time: '2 days ago',
     read: true,
-    issueKey: 'PROJ-2',
+    issueKey: 'VOTE-1',
     icon: CheckCircle,
   },
   {
     id: '5',
-    type: 'mention',
-    title: 'You were mentioned in PROJ-1',
-    message: 'Sarah Johnson mentioned you in a comment: "@You could you review the OAuth implementation?"',
+    type: 'complete',
+    title: 'Portfolio Website Updated',
+    message: 'New design showcasing cybersecurity and development projects is now live at aryavhir.in',
     time: '3 days ago',
     read: true,
-    issueKey: 'PROJ-1',
-    icon: MessageSquare,
+    issueKey: 'PORT-1',
+    icon: CheckCircle,
+  },
+  {
+    id: '6',
+    type: 'complete',
+    title: 'TryHackMe Path Completed',
+    message: 'Successfully completed Cybersecurity 101 path with 100% completion rate',
+    time: '1 week ago',
+    read: true,
+    issueKey: 'CYBER-2',
+    icon: CheckCircle,
+  },
+  {
+    id: '7',
+    type: 'issue',
+    title: 'Advertisers Portal Beta Released',
+    message: 'Campaign management portal is now in beta testing with select advertisers',
+    time: '1 week ago',
+    read: true,
+    issueKey: 'HYDRO-2',
+    icon: AlertCircle,
+  },
+  {
+    id: '8',
+    type: 'complete',
+    title: '15+ Websites Deployed',
+    message: 'Milestone reached: Successfully deployed 15+ production-ready websites on Vercel',
+    time: '2 weeks ago',
+    read: true,
+    issueKey: 'PORT-2',
+    icon: CheckCircle,
+  },
+  {
+    id: '9',
+    type: 'complete',
+    title: 'Publisher Rewards System Live',
+    message: 'Automated compensation system for publishers is now processing payments',
+    time: '2 weeks ago',
+    read: true,
+    issueKey: 'HYDRO-3',
+    icon: CheckCircle,
+  },
+  {
+    id: '10',
+    type: 'issue',
+    title: 'MetaMask Integration Testing',
+    message: 'Web3 integration for crypto purchases is in final testing phase',
+    time: '3 weeks ago',
+    read: true,
+    issueKey: 'HYDRO-4',
+    icon: AlertCircle,
   },
 ];
 
@@ -110,9 +161,12 @@ export default function Notifications() {
           <div className="max-w-4xl mx-auto p-6">
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
-                <h1 className="text-2xl font-semibold text-jira-gray-900" data-testid="text-notifications-title">
-                  Notifications
-                </h1>
+                <div>
+                  <h1 className="text-2xl font-semibold text-jira-gray-900" data-testid="text-notifications-title">
+                    Notifications
+                  </h1>
+                  <p className="text-sm text-jira-gray-500 mt-1">Stay updated with Aryavhir's latest achievements, project milestones, and career progress</p>
+                </div>
                 {unreadCount > 0 && (
                   <Button
                     variant="ghost"

@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { WorkflowProvider } from "@/contexts/WorkflowContext";
+import StartupOverlay from "@/components/StartupOverlay";
 import Board from "@/pages/Board";
 import Dashboard from "@/pages/Dashboard";
 import Backlog from "@/pages/Backlog";
@@ -47,6 +48,7 @@ function App() {
       <TooltipProvider>
         <WorkflowProvider>
           <Toaster />
+          <StartupOverlay />
           <Router />
         </WorkflowProvider>
       </TooltipProvider>

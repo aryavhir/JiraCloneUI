@@ -17,6 +17,7 @@ export default function Board() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [createColumnId, setCreateColumnId] = useState<string | undefined>(undefined);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [filters, setFilters] = useState<FilterOptions>({
     assignees: [],
     unassigned: false,
@@ -264,13 +265,19 @@ export default function Board() {
   };
 
   return (
-    <div className="h-screen bg-jira-gray-50 flex flex-col overflow-hidden">
-      <JiraHeader onCreateIssue={handleCreateIssue} />
+    <div className="min-h-screen bg-jira-gray-50 flex flex-col overflow-x-hidden">
+      <JiraHeader 
+        onCreateIssue={handleCreateIssue} 
+        onMobileMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+      />
       
-      <div className="flex flex-1 overflow-hidden">
-        <JiraSidebar />
+      <div className="flex flex-1 overflow-x-hidden">
+        <JiraSidebar 
+          isMobileMenuOpen={isMobileMenuOpen}
+          onMobileMenuClose={() => setIsMobileMenuOpen(false)}
+        />
         
-        <main className="flex-1 flex flex-col overflow-hidden">
+        <main className="flex-1 flex flex-col overflow-x-hidden">
           <BoardHeader 
             onSearch={handleBoardSearch}
             onFilterChange={handleFilterChange}

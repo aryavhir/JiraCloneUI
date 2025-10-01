@@ -266,9 +266,20 @@ export default function IssueModal({ issue, isOpen, onClose, onUpdate }: IssueMo
             </div>
 
             <div>
-              <label className="text-xs font-medium text-jira-gray-500 uppercase tracking-wide mb-2 block">
-                Assignee
-              </label>
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-xs font-medium text-jira-gray-500 uppercase tracking-wide">
+                  Assignee
+                </label>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-6 w-6 p-0 text-jira-gray-500 hover:text-jira-blue"
+                  onClick={() => window.open('/project-settings', '_blank')}
+                  title="Manage team members"
+                >
+                  <Plus className="h-3 w-3" />
+                </Button>
+              </div>
               <Select 
                 value={issue.assignee?.id || 'unassigned'} 
                 onValueChange={(value) => {

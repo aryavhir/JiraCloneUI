@@ -99,15 +99,15 @@ export default function Backlog() {
             <div className="px-6 py-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h1 className="text-2xl font-semibold text-jira-gray-900">Backlog</h1>
-                  <p className="text-sm text-jira-gray-500 mt-1">{currentProject.name}</p>
+                  <h1 className="text-2xl font-semibold text-jira-gray-900">Career Backlog</h1>
+                  <p className="text-sm text-jira-gray-500 mt-1">Future goals, projects, and learning objectives for Aryavhir's cybersecurity and development journey</p>
                 </div>
                 <Button 
                   onClick={handleCreateIssue}
                   className="bg-jira-blue hover:bg-jira-blue-dark text-white"
                 >
                   <Plus className="h-4 w-4 mr-2" />
-                  Create issue
+                  Add Goal
                 </Button>
               </div>
             </div>

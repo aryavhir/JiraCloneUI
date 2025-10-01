@@ -2,12 +2,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { BarChart3, TrendingUp, Clock, CheckCircle2, AlertCircle, Users, Calendar, Activity } from "lucide-react";
 import { Link } from "wouter";
 import JiraHeader from "@/components/JiraHeader";
 import JiraSidebar from "@/components/JiraSidebar";
 
 export default function Dashboard() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   // todo: remove mock functionality
   const projectStats = {
     totalIssues: 45,
@@ -55,24 +57,28 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="flex h-screen">
-      <JiraSidebar />
-      <div className="flex-1 flex flex-col min-w-0">
-        <JiraHeader />
-        <main className="p-6 space-y-6 flex-1 overflow-y-auto" data-testid="page-dashboard">
+    <div className="min-h-screen bg-jira-gray-50 flex flex-col overflow-x-hidden">
+      <JiraHeader onMobileMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)} />
+      
+      <div className="flex flex-1 overflow-x-hidden">
+        <JiraSidebar 
+          isMobileMenuOpen={isMobileMenuOpen}
+          onMobileMenuClose={() => setIsMobileMenuOpen(false)}
+        />
+        <main className="p-3 sm:p-6 space-y-4 sm:space-y-6 flex-1 overflow-y-auto" data-testid="page-dashboard">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between space-y-3 sm:space-y-0">
         <div>
-          <h1 className="text-2xl font-bold" data-testid="text-dashboard-title">Dashboard</h1>
-          <p className="text-muted-foreground">Welcome back! Here's what's happening with your project.</p>
+          <h1 className="text-xl sm:text-2xl font-bold" data-testid="text-dashboard-title">Dashboard</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">Welcome back! Here's what's happening with your project.</p>
         </div>
-        <Button asChild data-testid="button-view-board">
+        <Button asChild className="w-full sm:w-auto" data-testid="button-view-board">
           <Link href="/board">View Board</Link>
         </Button>
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
         <Card data-testid="card-total-issues">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Issues</CardTitle>

@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { useLocation, Link } from 'wouter';
-import { ChevronDown, ChevronRight, BarChart3, Settings, FolderOpen, Users, Zap, Search, Star, Clock, UserCheck } from 'lucide-react';
+import { ChevronDown, ChevronRight, Settings, FolderOpen, Users, Zap, Search, Star, Clock, UserCheck, Github, BarChart3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { mockProjects } from '@/data/mockData';
 
 interface SidebarItemProps {
   icon: React.ReactNode;
-  label: string;
+  label: string | React.ReactNode;
   isActive?: boolean;
   onClick?: () => void;
   href?: string;
@@ -81,7 +81,12 @@ function SidebarItem({
   );
 }
 
-export default function JiraSidebar() {
+interface JiraSidebarProps {
+  isMobileMenuOpen?: boolean;
+  onMobileMenuClose?: () => void;
+}
+
+export default function JiraSidebar({ isMobileMenuOpen = false, onMobileMenuClose }: JiraSidebarProps) {
   const [location] = useLocation();
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({
     projects: true,
@@ -105,12 +110,21 @@ export default function JiraSidebar() {
   };
 
   return (
-    <aside className="w-64 bg-white border-r border-jira-gray-200 h-full overflow-y-auto">
+    <>
+      {/* Mobile overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 sm:hidden"
+          onClick={onMobileMenuClose}
+        />
+      )}
+      
+      <aside className={`fixed sm:relative w-64 bg-white border-r border-jira-gray-200 min-h-screen overflow-y-auto transition-transform duration-300 z-50 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} sm:translate-x-0 sm:block`}>
       {/* Project Header */}
       <div className="p-4 border-b border-jira-gray-200">
         <div className="flex items-center space-x-3">
           <Avatar className="h-8 w-8">
-            <AvatarImage src={currentProject.avatarUrl} alt={currentProject.name} />
+            <AvatarImage src={currentProject.avatarUrl || '/assets/jira-logo.jpg'} alt={currentProject.name} />
             <AvatarFallback className="bg-jira-blue text-white text-sm font-medium">
               {currentProject.key.substring(0, 2)}
             </AvatarFallback>
@@ -165,13 +179,31 @@ export default function JiraSidebar() {
               Development
             </span>
           </div>
+          <div className="relative">
+            <SidebarItem
+              icon={<Github className="h-4 w-4" />}
+              label=""
+              href="/code"
+              isActive={isActive('/code')}
+              testId="nav-code"
+            />
+            <div className="absolute inset-0 pointer-events-none flex items-center pl-11">
+              <span className="gradient-text text-sm">Code</span>
+            </div>
+          </div>
+           <div className="relative">
           <SidebarItem
-            icon={<BarChart3 className="h-4 w-4" />}
-            label="Code"
-            href="/code"
-            isActive={isActive('/code')}
-            testId="nav-code"
+            icon={<FolderOpen className="h-4 w-4" />}
+            label=""
+            href="/projects"
+            isActive={isActive('/projects')}
+            testId="nav-all-projects"
+            
           />
+           <div className="absolute inset-0 pointer-events-none flex items-center pl-11">
+              <span className="gradient-text text-sm">Projects</span>
+            </div>
+</div>
           <SidebarItem
             icon={<UserCheck className="h-4 w-4" />}
             label="Releases"
@@ -182,7 +214,6 @@ export default function JiraSidebar() {
         </div>
 
 
-        
 
         {/* Project Settings */}
         <div className="pt-4 border-t border-jira-gray-200">
@@ -195,6 +226,7 @@ export default function JiraSidebar() {
           />
         </div>
       </nav>
-    </aside>
+      </aside>
+    </>
   );
 }

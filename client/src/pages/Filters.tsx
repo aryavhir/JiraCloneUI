@@ -26,7 +26,7 @@ const mockFilters: SavedFilter[] = [
     issueCount: 5,
     starred: true,
     lastUsed: '2 hours ago',
-    owner: 'You',
+    owner: 'Aryavhir koul',
   },
   {
     id: '2',
@@ -35,7 +35,7 @@ const mockFilters: SavedFilter[] = [
     issueCount: 8,
     starred: false,
     lastUsed: '1 day ago',
-    owner: 'You',
+    owner: 'Aryavhir koul',
   },
   {
     id: '3',
@@ -44,7 +44,7 @@ const mockFilters: SavedFilter[] = [
     issueCount: 12,
     starred: true,
     lastUsed: '3 hours ago',
-    owner: 'You',
+    owner: 'Aryavhir koul',
   },
   {
     id: '4',
@@ -53,7 +53,7 @@ const mockFilters: SavedFilter[] = [
     issueCount: 3,
     starred: false,
     lastUsed: '5 days ago',
-    owner: 'You',
+    owner: 'Aryavhir koul',
   },
   {
     id: '5',

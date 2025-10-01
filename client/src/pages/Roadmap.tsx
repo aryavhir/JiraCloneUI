@@ -45,33 +45,83 @@ const quarters2026 = [
 const initialEpics: Epic[] = [
   {
     id: '1',
-    key: 'PROJ-100',
-    summary: 'User Authentication System',
+    key: 'CYBER-FOUNDATION',
+    summary: 'Cybersecurity Foundation & Certifications',
     startDate: '2024-01-01',
-    endDate: '2024-03-31',
-    progress: 75,
-    status: 'in-progress',
-    issues: mockIssues.slice(0, 3),
+    endDate: '2024-06-30',
+    progress: 100,
+    status: 'completed',
+    issues: [],
   },
   {
     id: '2',
-    key: 'PROJ-101',
-    summary: 'Dashboard Redesign',
-    startDate: '2024-02-15',
-    endDate: '2024-05-30',
-    progress: 30,
-    status: 'in-progress',
-    issues: mockIssues.slice(1, 3),
+    key: 'FULLSTACK-MASTERY',
+    summary: 'Full-Stack Development Mastery',
+    startDate: '2024-03-01',
+    endDate: '2024-08-31',
+    progress: 100,
+    status: 'completed',
+    issues: [],
   },
   {
     id: '3',
-    key: 'PROJ-102',
-    summary: 'API Performance Optimization',
-    startDate: '2024-04-01',
-    endDate: '2024-06-30',
+    key: 'HYDRO-ADTECH',
+    summary: 'Hydro Online AdTech Platform Development',
+    startDate: '2024-08-01',
+    endDate: '2024-12-31',
+    progress: 75,
+    status: 'in-progress',
+    issues: [],
+  },
+  {
+    id: '4',
+    key: 'BLOCKCHAIN-VOTING',
+    summary: 'Blockchain Voting Application',
+    startDate: '2024-06-01',
+    endDate: '2024-09-30',
+    progress: 100,
+    status: 'completed',
+    issues: [],
+  },
+  {
+    id: '5',
+    key: 'ADVANCED-SECURITY',
+    summary: 'Advanced Security Certifications (OSCP)',
+    startDate: '2025-01-01',
+    endDate: '2025-06-30',
     progress: 0,
     status: 'planned',
-    issues: mockIssues.slice(3, 5),
+    issues: [],
+  },
+  {
+    id: '6',
+    key: 'SECURITY-CONSULTING',
+    summary: 'Cybersecurity Consulting Business Launch',
+    startDate: '2025-03-01',
+    endDate: '2025-12-31',
+    progress: 0,
+    status: 'planned',
+    issues: [],
+  },
+  {
+    id: '7',
+    key: 'AI-SECURITY',
+    summary: 'AI & Machine Learning Security Research',
+    startDate: '2025-07-01',
+    endDate: '2026-06-30',
+    progress: 0,
+    status: 'planned',
+    issues: [],
+  },
+  {
+    id: '8',
+    key: 'SECURITY-LEADERSHIP',
+    summary: 'Cybersecurity Leadership & Team Management',
+    startDate: '2026-01-01',
+    endDate: '2026-12-31',
+    progress: 0,
+    status: 'planned',
+    issues: [],
   },
 ];
 
@@ -158,8 +208,8 @@ export default function Roadmap() {
             <div className="px-6 py-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h1 className="text-2xl font-semibold text-jira-gray-900">Roadmap</h1>
-                  <p className="text-sm text-jira-gray-500 mt-1">{currentProject.name}</p>
+                  <h1 className="text-2xl font-semibold text-jira-gray-900">Career Roadmap</h1>
+                  <p className="text-sm text-jira-gray-500 mt-1">Aryavhir's professional journey and future milestones in cybersecurity and development</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <Button variant="outline" size="sm">

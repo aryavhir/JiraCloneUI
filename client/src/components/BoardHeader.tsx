@@ -52,45 +52,45 @@ export default function BoardHeader({
   };
 
   return (
-    <div className="bg-white border-b border-jira-gray-200 px-6 py-4">
+    <div className="bg-white border-b border-jira-gray-200 px-3 sm:px-6 py-4">
       {/* Top row - Board title and actions */}
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center space-x-3">
-          <h1 className="text-2xl font-medium text-jira-gray-900" data-testid="text-board-title">
+        <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
+          <h1 className="text-lg sm:text-2xl font-medium text-jira-gray-900 truncate" data-testid="text-board-title">
             {boardName}
           </h1>
           <Button
             variant="ghost"
             size="icon"
             onClick={handleStarToggle}
-            className={`h-8 w-8 ${isStarred ? 'text-yellow-500' : 'text-jira-gray-400 hover:text-yellow-500'}`}
+            className={`h-8 w-8 flex-shrink-0 ${isStarred ? 'text-yellow-500' : 'text-jira-gray-400 hover:text-yellow-500'}`}
             data-testid="button-star-board"
           >
             <Star className={`h-4 w-4 ${isStarred ? 'fill-current' : ''}`} />
           </Button>
         </div>
-
-      
       </div>
 
       {/* Sprint info */}
       {activeSprint && (
         <div className="mb-4">
-          <div className="flex items-center space-x-4">
-            <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200" data-testid="badge-sprint-status">
-              Active Sprint
-            </Badge>
-            <span className="text-sm font-medium text-jira-gray-900" data-testid="text-sprint-name">
-              {activeSprint.name}
-            </span>
-            <span className="text-sm text-jira-gray-500" data-testid="text-sprint-dates">
+          <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+            <div className="flex items-center space-x-2 sm:space-x-4">
+              <Badge variant="secondary" className="bg-green-100 text-green-800 border-green-200" data-testid="badge-sprint-status">
+                Active Sprint
+              </Badge>
+              <span className="text-sm font-medium text-jira-gray-900 truncate" data-testid="text-sprint-name">
+                {activeSprint.name}
+              </span>
+            </div>
+            <span className="text-xs sm:text-sm text-jira-gray-500" data-testid="text-sprint-dates">
               {activeSprint.startDate && activeSprint.endDate && (
                 `${new Date(activeSprint.startDate).toLocaleDateString()} - ${new Date(activeSprint.endDate).toLocaleDateString()}`
               )}
             </span>
           </div>
           {activeSprint.goal && (
-            <p className="text-sm text-jira-gray-600 mt-1" data-testid="text-sprint-goal">
+            <p className="text-xs sm:text-sm text-jira-gray-600 mt-1" data-testid="text-sprint-goal">
               <strong>Sprint goal:</strong> {activeSprint.goal}
             </p>
           )}
@@ -98,23 +98,23 @@ export default function BoardHeader({
       )}
 
       {/* Filter and search row */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between space-y-3 sm:space-y-0">
+        <div className="flex items-center space-x-2 sm:space-x-4 min-w-0 flex-1">
           {/* Search */}
-          <div className="relative">
+          <div className="relative flex-1 max-w-xs">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-jira-gray-400 h-4 w-4" />
             <Input
               type="search"
               placeholder="Search this board"
               value={searchQuery}
               onChange={handleSearchChange}
-              className="pl-10 pr-4 py-2 w-64 h-8 bg-white border-jira-gray-200 focus:border-jira-blue focus:ring-jira-blue text-sm"
+              className="pl-10 pr-4 py-2 w-full h-8 bg-white border-jira-gray-200 focus:border-jira-blue focus:ring-jira-blue text-sm"
               data-testid="input-board-search"
             />
           </div>
 
           {/* Filters */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 flex-shrink-0">
             {filters && onFilterChange && (
               <FilterDropdown 
                 filters={filters}
@@ -122,32 +122,32 @@ export default function BoardHeader({
                 issues={issues}
               />
             )}
-            
-            {/* Create Issue Button */}
-            {onCreateIssue && (
-              <Button 
-                onClick={onCreateIssue}
-                size="sm"
-                className="bg-jira-blue hover:bg-jira-blue-dark text-white"
-                data-testid="button-create-issue"
-              >
-                <Plus className="h-4 w-4 mr-1" />
-                Create
-              </Button>
-            )}
-
-         
           </div>
+        </div>
+        
+        {/* Create Issue Button */}
+        <div className="flex-shrink-0">
+          {onCreateIssue && (
+            <Button 
+              onClick={onCreateIssue}
+              size="sm"
+              className="bg-jira-blue hover:bg-jira-blue-dark text-white"
+              data-testid="button-create-issue"
+            >
+              <Plus className="h-4 w-4 mr-1" />
+              Create
+            </Button>
+          )}
         </div>
 
         {/* Assigned team members */}
-        <div className="flex items-center space-x-2">
-          <span className="text-sm text-jira-gray-500">Assignees:</span>
-          <div className="flex -space-x-2">
-            {assignedUsers.map((user, index) => (
+        <div className="flex items-center space-x-2 mt-3 sm:mt-0">
+          <span className="text-xs sm:text-sm text-jira-gray-500">Assignees:</span>
+          <div className="flex -space-x-1 sm:-space-x-2">
+            {assignedUsers.slice(0, 3).map((user, index) => (
               <Avatar 
                 key={user.id} 
-                className="h-8 w-8 border-2 border-white hover:z-10 relative cursor-pointer"
+                className="h-5 w-5 sm:h-8 sm:w-8 border-2 border-white hover:z-10 relative cursor-pointer"
                 data-testid={`avatar-assignee-${user.id}`}
               >
                 <AvatarImage src={user.avatarUrl} alt={user.name} />
@@ -156,10 +156,15 @@ export default function BoardHeader({
                 </AvatarFallback>
               </Avatar>
             ))}
+            {assignedUsers.length > 3 && (
+              <div className="h-5 w-5 sm:h-8 sm:w-8 rounded-full bg-jira-gray-200 border-2 border-white flex items-center justify-center">
+                <span className="text-xs text-jira-gray-600">+{assignedUsers.length - 3}</span>
+              </div>
+            )}
             <Button 
               variant="outline" 
               size="icon" 
-              className="h-8 w-8 rounded-full border-2 border-white bg-jira-gray-100 hover:bg-jira-gray-200"
+              className="h-5 w-5 sm:h-8 sm:w-8 rounded-full border-2 border-white bg-jira-gray-100 hover:bg-jira-gray-200"
               onClick={() => console.log('Add assignee clicked')}
               data-testid="button-add-assignee"
             >

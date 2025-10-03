@@ -45,9 +45,9 @@ const quarters2026 = [
 const initialEpics: Epic[] = [
   {
     id: '1',
-    key: 'CYBER-FOUNDATION',
-    summary: 'Cybersecurity Foundation & Certifications',
-    startDate: '2024-01-01',
+    key: 'Q2-2024',
+    summary: 'Completed Bachelor\'s in Information Technology',
+    startDate: '2024-04-01',
     endDate: '2024-06-30',
     progress: 100,
     status: 'completed',
@@ -55,39 +55,39 @@ const initialEpics: Epic[] = [
   },
   {
     id: '2',
-    key: 'FULLSTACK-MASTERY',
-    summary: 'Full-Stack Development Mastery',
-    startDate: '2024-03-01',
-    endDate: '2024-08-31',
-    progress: 100,
-    status: 'completed',
-    issues: [],
-  },
-  {
-    id: '3',
-    key: 'HYDRO-ADTECH',
-    summary: 'Hydro Online AdTech Platform Development',
-    startDate: '2024-08-01',
-    endDate: '2024-12-31',
-    progress: 75,
-    status: 'in-progress',
-    issues: [],
-  },
-  {
-    id: '4',
-    key: 'BLOCKCHAIN-VOTING',
-    summary: 'Blockchain Voting Application',
-    startDate: '2024-06-01',
+    key: 'Q3-2024',
+    summary: 'Joined Hydro Online as Full Stack Developer',
+    startDate: '2024-07-01',
     endDate: '2024-09-30',
     progress: 100,
     status: 'completed',
     issues: [],
   },
   {
-    id: '5',
-    key: 'ADVANCED-SECURITY',
-    summary: 'Advanced Security Certifications (OSCP)',
+    id: '3',
+    key: 'Q4-2024',
+    summary: 'OpenRTB JS Development',
+    startDate: '2024-10-01',
+    endDate: '2024-12-31',
+    progress: 85,
+    status: 'in-progress',
+    issues: [],
+  },
+  {
+    id: '4',
+    key: 'Q1-2025',
+    summary: 'Hydro Online Main Site & Payment Infrastructure',
     startDate: '2025-01-01',
+    endDate: '2025-03-31',
+    progress: 0,
+    status: 'planned',
+    issues: [],
+  },
+  {
+    id: '5',
+    key: 'Q2-2025',
+    summary: 'Decentralized File Transfer System',
+    startDate: '2025-04-01',
     endDate: '2025-06-30',
     progress: 0,
     status: 'planned',
@@ -95,30 +95,20 @@ const initialEpics: Epic[] = [
   },
   {
     id: '6',
-    key: 'SECURITY-CONSULTING',
-    summary: 'Cybersecurity Consulting Business Launch',
-    startDate: '2025-03-01',
-    endDate: '2025-12-31',
+    key: 'Q3-2025',
+    summary: 'Active Interviewing & Career Opportunities',
+    startDate: '2025-07-01',
+    endDate: '2025-09-30',
     progress: 0,
     status: 'planned',
     issues: [],
   },
   {
     id: '7',
-    key: 'AI-SECURITY',
-    summary: 'AI & Machine Learning Security Research',
-    startDate: '2025-07-01',
-    endDate: '2026-06-30',
-    progress: 0,
-    status: 'planned',
-    issues: [],
-  },
-  {
-    id: '8',
-    key: 'SECURITY-LEADERSHIP',
-    summary: 'Cybersecurity Leadership & Team Management',
+    key: 'Q1-2026',
+    summary: 'Jr. Penetration Tester Certification',
     startDate: '2026-01-01',
-    endDate: '2026-12-31',
+    endDate: '2026-03-31',
     progress: 0,
     status: 'planned',
     issues: [],
@@ -127,7 +117,7 @@ const initialEpics: Epic[] = [
 
 export default function Roadmap() {
   const currentProject = mockProjects[0];
-  const [selectedYear, setSelectedYear] = useState(2024);
+  const [selectedYear, setSelectedYear] = useState(2025);
   const [epics, setEpics] = useState<Epic[]>(initialEpics);
   const [showCreateEpic, setShowCreateEpic] = useState(false);
   const [newEpic, setNewEpic] = useState({
@@ -209,7 +199,7 @@ export default function Roadmap() {
               <div className="flex items-center justify-between">
                 <div>
                   <h1 className="text-2xl font-semibold text-jira-gray-900">Career Roadmap</h1>
-                  <p className="text-sm text-jira-gray-500 mt-1">Aryavhir's professional journey and future milestones in cybersecurity and development</p>
+                  <p className="text-sm text-jira-gray-500 mt-1">My career journey from graduation to current role at Hydro Online and future plans</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <Button variant="outline" size="sm">

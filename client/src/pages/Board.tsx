@@ -6,10 +6,13 @@ import KanbanBoard from '@/components/KanbanBoard';
 import IssueModal from '@/components/IssueModal';
 import CreateIssueModal from '@/components/CreateIssueModal';
 import { FilterOptions } from '@/components/FilterDropdown';
-import { JiraIssue } from '@shared/types';
-import { mockProjects } from '@/data/mockData';
+import { JiraIssue, JiraSprint } from '@shared/types';
+import { mockProjects, mockSprints } from '@/data/mockData';
 import { mockUsers } from '@/data/mockData';
 import { useWorkflow } from '@/contexts/WorkflowContext';
+import { ChevronDown, ChevronRight, Calendar, Target } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 export default function Board() {
   const [selectedIssue, setSelectedIssue] = useState<JiraIssue | null>(null);
@@ -18,14 +21,14 @@ export default function Board() {
   const [createColumnId, setCreateColumnId] = useState<string | undefined>(undefined);
   const [searchQuery, setSearchQuery] = useState('');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [expandedSprints, setExpandedSprints] = useState<Record<string, boolean>>({
+    '1': true, // First sprint expanded by default
+    '2': false,
+    '3': false,
+  });
   const [filters, setFilters] = useState<FilterOptions>({
-    assignees: [],
-    unassigned: false,
-    issueTypes: [],
-    priorities: [],
     statuses: [],
     labels: [],
-    reporters: [],
   });
 
   const handleIssueClick = (issue: JiraIssue) => {
@@ -153,47 +156,15 @@ export default function Board() {
           if (!matchesSearch) return false;
         }
 
-        // Assignee and Unassigned filter
-        if (filters.assignees.length > 0 || filters.unassigned) {
-          let matchesAssignee = false;
-          
-          // Check if matches specific assignees
-          if (filters.assignees.length > 0 && issue.assignee && filters.assignees.includes(issue.assignee.id)) {
-            matchesAssignee = true;
-          }
-          
-          // Check if matches unassigned filter
-          if (filters.unassigned && !issue.assignee) {
-            matchesAssignee = true;
-          }
-          
-          if (!matchesAssignee) return false;
-        }
-
-        // Issue type filter
-        if (filters.issueTypes.length > 0 && !filters.issueTypes.includes(issue.type)) {
-          return false;
-        }
-
-        // Priority filter
-        if (filters.priorities.length > 0 && !filters.priorities.includes(issue.priority)) {
-          return false;
-        }
-
         // Status filter
         if (filters.statuses.length > 0 && !filters.statuses.includes(issue.status)) {
           return false;
         }
 
-        // Labels filter
+        // Labels filter (Skills)
         if (filters.labels.length > 0) {
           const hasMatchingLabel = filters.labels.some(label => issue.labels.includes(label));
           if (!hasMatchingLabel) return false;
-        }
-
-        // Reporter filter
-        if (filters.reporters.length > 0 && !filters.reporters.includes(issue.reporter.id)) {
-          return false;
         }
 
         return true;
@@ -264,10 +235,30 @@ export default function Board() {
     setSelectedIssue(updatedIssue);
   };
 
+  const toggleSprintExpansion = (sprintId: string) => {
+    setExpandedSprints(prev => ({
+      ...prev,
+      [sprintId]: !prev[sprintId]
+    }));
+  };
+
+  // Get active sprints
+  const activeSprints = mockSprints.filter(sprint => sprint.state === 'active');
+
+  // Function to get columns for a specific sprint (applying filters)
+  const getColumnsForSprint = (sprint: JiraSprint) => {
+    const sprintIssues = sprint.issues || [];
+    return filteredColumns.map(column => ({
+      ...column,
+      issues: column.issues.filter(issue => 
+        sprintIssues.some(sprintIssue => sprintIssue && sprintIssue.id === issue.id)
+      )
+    }));
+  };
+
   return (
     <div className="min-h-screen bg-jira-gray-50 flex flex-col overflow-x-hidden">
       <JiraHeader 
-        onCreateIssue={handleCreateIssue} 
         onMobileMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       />
       
@@ -281,16 +272,83 @@ export default function Board() {
           <BoardHeader 
             onSearch={handleBoardSearch}
             onFilterChange={handleFilterChange}
+            onCreateIssue={handleCreateIssue}
             filters={filters}
             issues={allIssues}
-            onCreateIssue={handleCreateIssue}
           />
-          <KanbanBoard 
-            columns={filteredColumns}
-            onIssueMove={handleIssueMove}
-            onIssueClick={handleIssueClick}
-            onAddIssue={handleAddIssue}
-          />
+          
+          <div className="flex-1 overflow-y-auto">
+            <div className="">
+              {activeSprints.map((sprint) => {
+                const isExpanded = expandedSprints[sprint.id];
+                const sprintColumns = getColumnsForSprint(sprint);
+                const totalIssues = sprintColumns.reduce((sum, col) => sum + col.issues.length, 0);
+                
+                return (
+                  <div key={sprint.id} className="bg-white border border-jira-gray-200">
+                    {/* Sprint Header */}
+                    <div 
+                      className="p-4 border-b border-jira-gray-200 cursor-pointer hover:bg-jira-gray-50 transition-colors"
+                      onClick={() => toggleSprintExpansion(sprint.id)}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          {isExpanded ? (
+                            <ChevronDown className="h-5 w-5 text-jira-gray-500" />
+                          ) : (
+                            <ChevronRight className="h-5 w-5 text-jira-gray-500" />
+                          )}
+                          <div>
+                            <h3 className="text-lg font-semibold text-jira-gray-900">
+                              {sprint.name}
+                            </h3>
+                            <div className="flex items-center space-x-4 text-sm text-jira-gray-500 mt-1">
+                              <div className="flex items-center space-x-1">
+                                <Calendar className="h-4 w-4" />
+                                <span>
+                                  {sprint.startDate ? new Date(sprint.startDate).toLocaleDateString() : 'TBD'} - 
+                                  {sprint.endDate === 'Current' ? ' Current' : (sprint.endDate ? new Date(sprint.endDate).toLocaleDateString() : 'TBD')}
+                                </span>
+                              </div>
+                              <div className="flex items-center space-x-1">
+                                <Target className="h-4 w-4" />
+                                <span>{totalIssues} issues</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <Badge variant="outline" className="bg-green-100 text-green-800 border-green-200">
+                            Active
+                          </Badge>
+                        </div>
+                      </div>
+                      
+                      {sprint.goal && (
+                        <div className="mt-3 p-3 bg-blue-50 border-l-4 border-blue-400 rounded">
+                          <p className="text-sm text-blue-900">
+                            <span className="font-medium">Sprint Goal:</span> {sprint.goal}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Sprint Content */}
+                    {isExpanded && (
+                      <div className="p-4">
+                        <KanbanBoard 
+                          columns={sprintColumns}
+                          onIssueMove={handleIssueMove}
+                          onIssueClick={handleIssueClick}
+                          onAddIssue={handleAddIssue}
+                        />
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </main>
       </div>
 

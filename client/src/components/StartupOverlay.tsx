@@ -49,7 +49,7 @@ export default function StartupOverlay({ onComplete }: StartupOverlayProps) {
                 />
               </div>
               <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">
-                Welcome to Jira Clone!
+                Welcome to My Jira Clone!
               </h2>
               <p className="text-gray-600 text-sm sm:text-lg px-2">
                 A powerful project management tool built with React and TypeScript. 
@@ -107,7 +107,7 @@ export default function StartupOverlay({ onComplete }: StartupOverlayProps) {
                 Keep your code and project management in sync.
               </p>
               <div className="bg-gray-50 rounded-lg p-3 sm:p-4 text-xs sm:text-sm text-gray-700 mx-2">
-                💡 <strong>Pro tip:</strong> Check out the Code tab to see your repositories and PRs!
+                💡 <strong>Pro tip:</strong> Check out the Project tab to see more  projects !
               </div>
             </div>
           </Step>

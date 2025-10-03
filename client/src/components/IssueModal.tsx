@@ -45,8 +45,6 @@ const statusOptions: Record<IssueStatus, string> = {
 
 export default function IssueModal({ issue, isOpen, onClose, onUpdate }: IssueModalProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const [editedSummary, setEditedSummary] = useState('');
-  const [editedDescription, setEditedDescription] = useState('');
   const [newComment, setNewComment] = useState('');
 
   if (!issue) return null;
@@ -55,19 +53,12 @@ export default function IssueModal({ issue, isOpen, onClose, onUpdate }: IssueMo
   const TypeIcon = typeIcons[issue.type].icon;
 
   const handleEditToggle = () => {
-    if (!isEditing) {
-      setEditedSummary(issue.summary);
-      setEditedDescription(issue.description);
-    }
     setIsEditing(!isEditing);
   };
 
   const handleSave = () => {
     console.log('Saving changes to issue:', issue.key);
-    onUpdate?.({
-      summary: editedSummary,
-      description: editedDescription
-    });
+    onUpdate?.({});
     setIsEditing(false);
   };
 
@@ -123,42 +114,21 @@ export default function IssueModal({ issue, isOpen, onClose, onUpdate }: IssueMo
           <div className="flex-1 p-6 space-y-6">
             {/* Summary */}
             <div>
-              {isEditing ? (
-                <Input
-                  value={editedSummary}
-                  onChange={(e) => setEditedSummary(e.target.value)}
-                  className="text-xl font-medium text-jira-gray-900"
-                  data-testid="input-edit-summary"
-                />
-              ) : (
-                <h1 className="text-xl font-medium text-jira-gray-900 cursor-pointer hover:bg-jira-gray-50 p-2 -m-2 rounded" 
-                    onClick={handleEditToggle}
-                    data-testid={`text-modal-issue-summary-${issue.id}`}>
-                  {issue.summary}
-                </h1>
-              )}
+              <h1 className="text-xl font-medium text-jira-gray-900" 
+                  data-testid={`text-modal-issue-summary-${issue.id}`}>
+                {issue.summary}
+              </h1>
             </div>
 
             {/* Description */}
             <div>
               <h3 className="text-sm font-medium text-jira-gray-900 mb-2">Description</h3>
-              {isEditing ? (
-                <Textarea
-                  value={editedDescription}
-                  onChange={(e) => setEditedDescription(e.target.value)}
-                  rows={4}
-                  className="w-full"
-                  data-testid="textarea-edit-description"
-                />
-              ) : (
-                <div 
-                  className="text-sm text-jira-gray-700 cursor-pointer hover:bg-jira-gray-50 p-3 -m-3 rounded min-h-20"
-                  onClick={handleEditToggle}
-                  data-testid={`text-modal-issue-description-${issue.id}`}
-                >
-                  {issue.description || 'Click to add a description...'}
-                </div>
-              )}
+              <div 
+                className="text-sm text-jira-gray-700 p-3 bg-jira-gray-50 rounded min-h-20"
+                data-testid={`text-modal-issue-description-${issue.id}`}
+              >
+                {issue.description || 'No description provided'}
+              </div>
             </div>
 
             {/* Edit Actions */}

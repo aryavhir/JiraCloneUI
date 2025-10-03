@@ -230,7 +230,7 @@ export default function KanbanBoard({ columns: initialColumns, onIssueMove, onIs
         onDragEnd={handleDragEnd}
       >
         <SortableContext items={sortableIds} strategy={verticalListSortingStrategy}>
-          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 lg:space-x-6 min-h-full p-2 sm:p-6 sm:min-w-max">
+          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 lg:space-x-6 min-h-full sm:min-w-max">
             {initialColumns.map((column) => (
               <div key={column.id} className="flex-shrink-0 w-full sm:w-72 lg:w-80 max-w-full">
                 <KanbanColumnComponent

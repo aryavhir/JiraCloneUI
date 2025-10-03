@@ -100,15 +100,9 @@ export default function Backlog() {
               <div className="flex items-center justify-between">
                 <div>
                   <h1 className="text-2xl font-semibold text-jira-gray-900">Career Backlog</h1>
-                  <p className="text-sm text-jira-gray-500 mt-1">Future goals, projects, and learning objectives for Aryavhir's cybersecurity and development journey</p>
+                  <p className="text-sm text-jira-gray-500 mt-1">Future goals, projects, and learning objectives for my fullstack development and cybersecurity journey</p>
                 </div>
-                <Button 
-                  onClick={handleCreateIssue}
-                  className="bg-jira-blue hover:bg-jira-blue-dark text-white"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Goal
-                </Button>
+            
               </div>
             </div>
           </div>
@@ -132,7 +126,7 @@ export default function Backlog() {
                   <div className="p-4">
                     {activeSprint.goal && (
                       <div className="mb-4 p-3 bg-blue-50 border-l-4 border-blue-400 rounded">
-                        <p className="text-sm text-blue-900"><span className="font-medium">Sprint Goal:</span> {activeSprint.goal}</p>
+                        <p className="text-sm text-blue-900"><span className="font-medium">Sprint </span> {activeSprint.goal}</p>
                       </div>
                     )}
                     <div className="space-y-2">

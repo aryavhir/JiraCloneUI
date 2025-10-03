@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Search, MoreHorizontal, Users, Settings, Share, Star, Plus } from 'lucide-react';
+import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -20,9 +21,9 @@ interface BoardHeaderProps {
   sprintName?: string;
   onSearch?: (query: string) => void;
   onFilterChange?: (filters: FilterOptions) => void;
+  onCreateIssue?: () => void;
   filters?: FilterOptions;
   issues?: JiraIssue[];
-  onCreateIssue?: () => void;
 }
 
 export default function BoardHeader({ 
@@ -30,9 +31,9 @@ export default function BoardHeader({
   sprintName,
   onSearch,
   onFilterChange,
+  onCreateIssue,
   filters,
-  issues = [],
-  onCreateIssue
+  issues = []
 }: BoardHeaderProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isStarred, setIsStarred] = useState(false);
@@ -113,7 +114,7 @@ export default function BoardHeader({
             />
           </div>
 
-          {/* Filters */}
+          {/* Filters and Create Button */}
           <div className="flex items-center space-x-2 flex-shrink-0">
             {filters && onFilterChange && (
               <FilterDropdown 
@@ -122,23 +123,19 @@ export default function BoardHeader({
                 issues={issues}
               />
             )}
+            {onCreateIssue && (
+              <Button 
+                onClick={onCreateIssue}
+                size="sm"
+                className="bg-jira-blue hover:bg-jira-blue-dark text-white"
+              >
+                <Plus className="h-4 w-4 mr-1" />
+                Create
+              </Button>
+            )}
           </div>
         </div>
         
-        {/* Create Issue Button */}
-        <div className="flex-shrink-0">
-          {onCreateIssue && (
-            <Button 
-              onClick={onCreateIssue}
-              size="sm"
-              className="bg-jira-blue hover:bg-jira-blue-dark text-white"
-              data-testid="button-create-issue"
-            >
-              <Plus className="h-4 w-4 mr-1" />
-              Create
-            </Button>
-          )}
-        </div>
 
         {/* Assigned team members */}
         <div className="flex items-center space-x-2 mt-3 sm:mt-0">
@@ -161,15 +158,16 @@ export default function BoardHeader({
                 <span className="text-xs text-jira-gray-600">+{assignedUsers.length - 3}</span>
               </div>
             )}
-            <Button 
-              variant="outline" 
-              size="icon" 
-              className="h-5 w-5 sm:h-8 sm:w-8 rounded-full border-2 border-white bg-jira-gray-100 hover:bg-jira-gray-200"
-              onClick={() => console.log('Add assignee clicked')}
-              data-testid="button-add-assignee"
-            >
-              <span className="text-xs text-jira-gray-600">+</span>
-            </Button>
+            <Link href="/teams">
+              <Button 
+                variant="outline" 
+                size="icon" 
+                className="h-5 w-5 sm:h-8 sm:w-8 rounded-full border-2 border-white bg-jira-gray-100 hover:bg-jira-gray-200"
+                data-testid="button-add-assignee"
+              >
+                <span className="text-xs text-jira-gray-600">+</span>
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

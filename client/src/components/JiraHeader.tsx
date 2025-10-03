@@ -17,7 +17,6 @@ import { mockUsers } from '@/data/mockData';
 import { formatDistanceToNow } from 'date-fns';
 
 interface JiraHeaderProps {
-  onCreateIssue?: () => void;
   onMobileMenuToggle?: () => void;
 }
 
@@ -52,7 +51,7 @@ const mockNotifications = [
   },
 ];
 
-export default function JiraHeader({ onCreateIssue, onMobileMenuToggle }: JiraHeaderProps) {
+export default function JiraHeader({ onMobileMenuToggle }: JiraHeaderProps) {
   const currentUser = mockUsers[0]; // todo: remove mock functionality
   const [searchQuery, setSearchQuery] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
@@ -242,6 +241,7 @@ export default function JiraHeader({ onCreateIssue, onMobileMenuToggle }: JiraHe
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          
         </nav>
       </div>
 

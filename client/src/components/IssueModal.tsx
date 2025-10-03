@@ -94,27 +94,27 @@ export default function IssueModal({ issue, isOpen, onClose, onUpdate }: IssueMo
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0" data-testid="modal-issue">
+      <DialogContent className="max-w-4xl max-h-[95vh] sm:max-h-[90vh] overflow-hidden p-0 flex flex-col gap-0" data-testid="modal-issue">
         {/* Header */}
-        <DialogHeader className="px-6 py-4 border-b border-jira-gray-200 flex flex-row items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="flex items-center space-x-2">
+        <DialogHeader className="px-3 sm:px-6 py-3 sm:py-4 border-b border-jira-gray-200 flex flex-row items-center justify-between flex-shrink-0">
+          <div className="flex items-center space-x-2 sm:space-x-3 min-w-0">
+            <div className="flex items-center space-x-1 sm:space-x-2">
               <TypeIcon className={`h-4 w-4 ${typeIcons[issue.type].color}`} />
-              <span className="text-sm text-jira-gray-500">{typeIcons[issue.type].label}</span>
+              <span className="text-xs sm:text-sm text-jira-gray-500">{typeIcons[issue.type].label}</span>
             </div>
-            <span className="text-sm font-mono text-jira-gray-500" data-testid={`text-modal-issue-key-${issue.id}`}>
+            <span className="text-xs sm:text-sm font-mono text-jira-gray-500 truncate" data-testid={`text-modal-issue-key-${issue.id}`}>
               {issue.key}
             </span>
           </div>
       
         </DialogHeader>
 
-        <div className="flex">
+        <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
           {/* Main Content */}
-          <div className="flex-1 p-6 space-y-6">
+          <div className="flex-1 p-3 sm:p-6 space-y-4 sm:space-y-6 overflow-y-auto">
             {/* Summary */}
             <div>
-              <h1 className="text-xl font-medium text-jira-gray-900" 
+              <h1 className="text-lg sm:text-xl font-medium text-jira-gray-900 leading-tight" 
                   data-testid={`text-modal-issue-summary-${issue.id}`}>
                 {issue.summary}
               </h1>
@@ -145,26 +145,26 @@ export default function IssueModal({ issue, isOpen, onClose, onUpdate }: IssueMo
 
             {/* Comments */}
             <div>
-              <h3 className="text-sm font-medium text-jira-gray-900 mb-4 flex items-center">
+              <h3 className="text-sm font-medium text-jira-gray-900 mb-3 sm:mb-4 flex items-center">
                 <MessageSquare className="h-4 w-4 mr-2" />
                 Comments ({issue.comments.length})
               </h3>
 
               {/* Add Comment */}
               <div className="mb-4">
-                <div className="flex space-x-3">
-                  <Avatar className="h-8 w-8">
+                <div className="flex space-x-2 sm:space-x-3">
+                  <Avatar className="h-7 w-7 sm:h-8 sm:w-8 flex-shrink-0">
                     <AvatarFallback className="bg-jira-blue text-white text-xs font-medium">
                       You
                     </AvatarFallback>
                   </Avatar>
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <Textarea
                       value={newComment}
                       onChange={(e) => setNewComment(e.target.value)}
                       placeholder="Add a comment..."
                       rows={3}
-                      className="resize-none"
+                      className="resize-none text-sm"
                       data-testid="textarea-add-comment"
                     />
                     <div className="flex justify-end mt-2">
@@ -173,6 +173,7 @@ export default function IssueModal({ issue, isOpen, onClose, onUpdate }: IssueMo
                         size="sm"
                         disabled={!newComment.trim()}
                         data-testid="button-add-comment"
+                        className="transition-opacity"
                       >
                         Comment
                       </Button>
@@ -182,26 +183,26 @@ export default function IssueModal({ issue, isOpen, onClose, onUpdate }: IssueMo
               </div>
 
               {/* Existing Comments */}
-              <div className="space-y-4">
+              <div className="space-y-3 sm:space-y-4">
                 {issue.comments.map((comment) => (
-                  <div key={comment.id} className="flex space-x-3" data-testid={`comment-${comment.id}`}>
-                    <Avatar className="h-8 w-8">
+                  <div key={comment.id} className="flex space-x-2 sm:space-x-3" data-testid={`comment-${comment.id}`}>
+                    <Avatar className="h-7 w-7 sm:h-8 sm:w-8 flex-shrink-0">
                       <AvatarImage src={comment.author.avatarUrl} alt={comment.author.name} />
                       <AvatarFallback className="bg-jira-blue text-white text-xs font-medium">
                         {comment.author.initials}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="flex-1">
-                      <div className="bg-jira-gray-50 p-3 rounded border">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-sm font-medium text-jira-gray-900" data-testid={`text-comment-author-${comment.id}`}>
+                    <div className="flex-1 min-w-0">
+                      <div className="bg-jira-gray-50 p-2.5 sm:p-3 rounded border">
+                        <div className="flex items-center justify-between mb-1 gap-2">
+                          <span className="text-xs sm:text-sm font-medium text-jira-gray-900 truncate" data-testid={`text-comment-author-${comment.id}`}>
                             {comment.author.name}
                           </span>
-                          <span className="text-xs text-jira-gray-500" data-testid={`text-comment-date-${comment.id}`}>
+                          <span className="text-xs text-jira-gray-500 flex-shrink-0" data-testid={`text-comment-date-${comment.id}`}>
                             {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
                           </span>
                         </div>
-                        <p className="text-sm text-jira-gray-700" data-testid={`text-comment-body-${comment.id}`}>
+                        <p className="text-xs sm:text-sm text-jira-gray-700" data-testid={`text-comment-body-${comment.id}`}>
                           {comment.body}
                         </p>
                       </div>
@@ -213,7 +214,7 @@ export default function IssueModal({ issue, isOpen, onClose, onUpdate }: IssueMo
           </div>
 
           {/* Sidebar */}
-          <div className="w-64 bg-jira-gray-50 border-l border-jira-gray-200 p-4 space-y-4">
+          <div className="w-full md:w-64 bg-jira-gray-50 border-t md:border-t-0 md:border-l border-jira-gray-200 p-3 sm:p-4 space-y-3 sm:space-y-4 flex-shrink-0 md:overflow-y-auto">
             <div>
               <label className="text-xs font-medium text-jira-gray-500 uppercase tracking-wide mb-2 block">
                 Status

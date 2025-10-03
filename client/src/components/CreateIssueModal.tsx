@@ -83,21 +83,21 @@ export default function CreateIssueModal({ open, onClose, onSubmit }: CreateIssu
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl" data-testid="modal-create-issue">
+      <DialogContent className="max-w-2xl max-h-[95vh] sm:max-h-[90vh] overflow-y-auto" data-testid="modal-create-issue">
         <DialogHeader>
-          <DialogTitle>Create Issue</DialogTitle>
+          <DialogTitle className="text-lg sm:text-xl">Create Issue</DialogTitle>
         </DialogHeader>
         
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="grid grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="issue-type">Issue Type *</Label>
+              <Label htmlFor="issue-type" className="text-sm">Issue Type *</Label>
               <Select 
                 value={formData.type} 
                 onValueChange={(value) => setFormData(prev => ({ ...prev, type: value }))}
                 required
               >
-                <SelectTrigger data-testid="select-issue-type">
+                <SelectTrigger data-testid="select-issue-type" className="h-10">
                   <SelectValue placeholder="Select issue type" />
                 </SelectTrigger>
                 <SelectContent>
@@ -117,12 +117,12 @@ export default function CreateIssueModal({ open, onClose, onSubmit }: CreateIssu
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="priority">Priority</Label>
+              <Label htmlFor="priority" className="text-sm">Priority</Label>
               <Select 
                 value={formData.priority} 
                 onValueChange={(value) => setFormData(prev => ({ ...prev, priority: value }))}
               >
-                <SelectTrigger data-testid="select-priority">
+                <SelectTrigger data-testid="select-priority" className="h-10">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>

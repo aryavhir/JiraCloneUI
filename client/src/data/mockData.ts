@@ -446,7 +446,7 @@ export const mockSprints: JiraSprint[] = [
     startDate: '2024-07-01T00:00:00Z',
     endDate: '2025-10-01T00:00:00Z',
     goal: 'Keep track of my work experience and projects',
-    issues: [mockIssues.find(issue => issue.id === '1'), mockIssues.find(issue => issue.id === '2'), mockIssues.find(issue => issue.id === '3'), mockIssues.find(issue => issue.id === '4'), mockIssues.find(issue => issue.id === '5')].filter((issue): issue is JiraIssue => issue !== undefined)
+    issues: [mockIssues.find(issue => issue.id === '1'),mockIssues.find(issue => issue.id === '19'), mockIssues.find(issue => issue.id === '2'), mockIssues.find(issue => issue.id === '3'), mockIssues.find(issue => issue.id === '4'), mockIssues.find(issue => issue.id === '5')].filter((issue): issue is JiraIssue => issue !== undefined)
   },
    {
     id: '2',

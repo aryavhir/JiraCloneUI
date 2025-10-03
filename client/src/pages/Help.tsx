@@ -1,10 +1,8 @@
 import JiraHeader from '@/components/JiraHeader';
 import JiraSidebar from '@/components/JiraSidebar';
-import { HelpCircle, Book, Video, MessageCircle, FileText, ExternalLink, Search, Settings } from 'lucide-react';
+import { HelpCircle, Book, Video, MessageCircle, FileText, ExternalLink, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useState } from 'react';
 import { resetStartupOverlay } from '@/utils/startup';
 
 const helpTopics = [
@@ -60,7 +58,7 @@ const popularResources = [
     title: 'LinkedIn Profile',
     description: 'Connect professionally and view career updates',
     icon: ExternalLink,
-    link: 'https://linkedin.com/in/Aryavhir koul'
+    link: 'https://www.linkedin.com/in/aryavhir-koul-04a08k/'
   },
   {
     title: 'Cybersecurity Certificates',
@@ -71,8 +69,6 @@ const popularResources = [
 ];
 
 export default function Help() {
-  const [searchQuery, setSearchQuery] = useState('');
-
   return (
     <div className="h-screen bg-jira-gray-50 flex flex-col overflow-hidden">
       <JiraHeader />
@@ -94,18 +90,6 @@ export default function Help() {
               <p className="text-lg text-jira-gray-600 max-w-2xl mx-auto">
                 Learn about Aryavhir's professional journey, technical expertise, and current projects in cybersecurity and full-stack development.
               </p>
-
-              <div className="max-w-2xl mx-auto relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-jira-gray-400 h-5 w-5" />
-                <Input
-                  type="search"
-                  placeholder="Search for help articles, guides, and tutorials..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-12 pr-4 py-6 text-base"
-                  data-testid="input-help-search"
-                />
-              </div>
             </div>
 
             <div className="mb-8">
@@ -125,7 +109,11 @@ export default function Help() {
                         <CardDescription>{resource.description}</CardDescription>
                       </CardHeader>
                       <CardContent>
-                        <Button variant="ghost" className="p-0 h-auto text-jira-blue">
+                        <Button 
+                          variant="ghost" 
+                          className="p-0 h-auto text-jira-blue"
+                          onClick={() => window.open(resource.link, '_blank', 'noopener,noreferrer')}
+                        >
                           Explore <ExternalLink className="h-3 w-3 ml-1" />
                         </Button>
                       </CardContent>

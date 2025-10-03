@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { WorkflowProvider } from "@/contexts/WorkflowContext";
+import { NotificationProvider } from "@/contexts/NotificationContext";
 import StartupOverlay from "@/components/StartupOverlay";
 import Board from "@/pages/Board";
 import Dashboard from "@/pages/Dashboard";
@@ -46,11 +47,13 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <WorkflowProvider>
-          <Toaster />
-          <StartupOverlay />
-          <Router />
-        </WorkflowProvider>
+        <NotificationProvider>
+          <WorkflowProvider>
+            <Toaster />
+            <StartupOverlay />
+            <Router />
+          </WorkflowProvider>
+        </NotificationProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );

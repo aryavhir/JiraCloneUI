@@ -93,39 +93,40 @@ export default function JiraHeader({ onMobileMenuToggle }: JiraHeaderProps) {
   ) : [];
 
   return (
-    <header className="h-14 bg-white border-b border-jira-gray-200 flex items-center justify-between px-2 sm:px-4 relative z-50">
+    <header className="h-14 bg-white border-b border-jira-gray-200 flex items-center justify-between px-3 sm:px-4 md:px-6 relative z-50">
       {/* Left section */}
-      <div className="flex items-center space-x-2 sm:space-x-4 flex-1">
+      <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 flex-1 min-w-0">
         {/* Mobile menu button */}
         <Button
           variant="ghost"
           size="sm"
-          className="sm:hidden h-8 w-8 p-0"
+          className="lg:hidden h-8 w-8 p-0 flex-shrink-0"
           onClick={onMobileMenuToggle}
+          data-testid="button-mobile-menu"
         >
-          <Menu className="h-4 w-4" />
+          <Menu className="h-5 w-5" />
         </Button>
 
         {/* Jira Logo */}
         <Link href="/">
-          <div className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity">
+          <div className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0">
             <img 
               src="/assets/jira-logo.jpg" 
               alt="Jira" 
-              className="w-6 h-6 rounded object-cover"
+              className="w-6 h-6 sm:w-7 sm:h-7 rounded object-cover"
             />
-            <span className="font-semibold text-jira-gray-800">Jira</span>
+            <span className="hidden sm:inline font-semibold text-jira-gray-800 text-sm md:text-base">Jira</span>
           </div>
         </Link>
 
         {/* Global Search Bar */}
-        <div className="flex-1 max-w-md mx-2 sm:mx-8">
+        <div className="flex-1 max-w-md mx-2 sm:mx-4 md:mx-8">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-jira-gray-400 h-4 w-4" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-jira-gray-400 h-4 w-4 pointer-events-none" />
             <Input
               type="search"
               placeholder="Search..."
-              className="hidden sm:block pl-10 pr-4 py-2 w-full h-9 bg-jira-gray-50 border-jira-gray-200 focus:border-jira-blue focus:ring-jira-blue focus:bg-white text-sm"
+              className="hidden md:block pl-10 pr-4 py-2 w-full h-9 bg-jira-gray-50 border-jira-gray-200 focus:border-jira-blue focus:ring-jira-blue focus:bg-white text-sm transition-colors"
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
               onFocus={() => searchQuery && setSearchOpen(true)}
@@ -135,22 +136,23 @@ export default function JiraHeader({ onMobileMenuToggle }: JiraHeaderProps) {
             <Button
               variant="ghost"
               size="sm"
-              className="sm:hidden h-8 w-8 p-0"
+              className="md:hidden h-8 w-8 p-0 flex-shrink-0"
               onClick={() => setSearchOpen(!searchOpen)}
+              data-testid="button-mobile-search"
             >
-              <Search className="h-4 w-4" />
+              <Search className="h-5 w-5" />
             </Button>
             {searchOpen && searchResults.length > 0 && (
-              <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-jira-gray-200 rounded-md shadow-lg max-h-96 overflow-y-auto z-50">
+              <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-jira-gray-200 rounded-md shadow-lg max-h-80 sm:max-h-96 overflow-y-auto z-50 w-screen sm:w-auto sm:min-w-[300px] -ml-3 sm:ml-0">
                 {searchResults.map((result, idx) => (
                   <div key={idx}>
                     {idx === 0 && (
-                      <div className="px-3 py-2 text-xs font-semibold text-jira-gray-500 uppercase">
+                      <div className="px-3 py-2 text-xs font-semibold text-jira-gray-500 uppercase sticky top-0 bg-white">
                         {result.category}
                       </div>
                     )}
                     {idx > 0 && searchResults[idx - 1].category !== result.category && (
-                      <div className="px-3 py-2 text-xs font-semibold text-jira-gray-500 uppercase border-t border-jira-gray-200">
+                      <div className="px-3 py-2 text-xs font-semibold text-jira-gray-500 uppercase border-t border-jira-gray-200 sticky top-0 bg-white">
                         {result.category}
                       </div>
                     )}
@@ -158,10 +160,10 @@ export default function JiraHeader({ onMobileMenuToggle }: JiraHeaderProps) {
                       href={result.type === 'page' ? result.path : '/board'}
                       onClick={() => setSearchOpen(false)}
                     >
-                      <div className="px-3 py-2 hover:bg-jira-gray-50 cursor-pointer">
-                        <div className="text-sm text-jira-gray-900">{result.title}</div>
+                      <div className="px-3 py-2 hover:bg-jira-gray-50 cursor-pointer active:bg-jira-gray-100 transition-colors">
+                        <div className="text-sm text-jira-gray-900 font-medium">{result.title}</div>
                         {'key' in result && result.key && (
-                          <div className="text-xs text-jira-gray-500">{result.key}</div>
+                          <div className="text-xs text-jira-gray-500 mt-0.5">{result.key}</div>
                         )}
                       </div>
                     </Link>
@@ -173,11 +175,11 @@ export default function JiraHeader({ onMobileMenuToggle }: JiraHeaderProps) {
         </div>
 
         {/* Navigation */}
-        <nav className="hidden md:flex items-center space-x-6">
+        <nav className="hidden lg:flex items-center space-x-2 xl:space-x-4 flex-shrink-0">
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="text-jira-gray-700 hover:text-jira-blue hover:bg-jira-blue-light">
+              <Button variant="ghost" size="sm" className="text-jira-gray-700 hover:text-jira-blue hover:bg-jira-blue-light transition-colors">
               <span className="gradient-text text-sm">Projects</span>
 
               </Button>
@@ -212,13 +214,13 @@ export default function JiraHeader({ onMobileMenuToggle }: JiraHeaderProps) {
           
         
           
-          <Button asChild variant="ghost" size="sm" className="text-jira-gray-700 hover:text-jira-blue hover:bg-jira-blue-light">
+          <Button asChild variant="ghost" size="sm" className="text-jira-gray-700 hover:text-jira-blue hover:bg-jira-blue-light transition-colors">
             <Link href="/dashboard">Dashboards</Link>
           </Button>
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="text-jira-gray-700 hover:text-jira-blue hover:bg-jira-blue-light">
+              <Button variant="ghost" size="sm" className="text-jira-gray-700 hover:text-jira-blue hover:bg-jira-blue-light transition-colors">
                   
                 Teams
               </Button>
@@ -246,7 +248,7 @@ export default function JiraHeader({ onMobileMenuToggle }: JiraHeaderProps) {
       </div>
 
       {/* Right section */}
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
       
 
     
@@ -256,7 +258,7 @@ export default function JiraHeader({ onMobileMenuToggle }: JiraHeaderProps) {
           asChild
           variant="ghost" 
           size="icon" 
-          className="h-8 w-8 text-jira-gray-500 hover:text-jira-gray-700 hover:bg-jira-gray-100"
+          className="hidden sm:flex h-8 w-8 text-jira-gray-500 hover:text-jira-gray-700 hover:bg-jira-gray-100 transition-colors"
           data-testid="button-help"
         >
           <Link href="/help">
@@ -269,7 +271,7 @@ export default function JiraHeader({ onMobileMenuToggle }: JiraHeaderProps) {
           asChild
           variant="ghost" 
           size="icon" 
-          className="h-8 w-8 text-jira-gray-500 hover:text-jira-gray-700 hover:bg-jira-gray-100"
+          className="hidden sm:flex h-8 w-8 text-jira-gray-500 hover:text-jira-gray-700 hover:bg-jira-gray-100 transition-colors"
           data-testid="button-settings"
         >
           <Link href="/settings">
@@ -283,18 +285,18 @@ export default function JiraHeader({ onMobileMenuToggle }: JiraHeaderProps) {
             <Button 
               variant="ghost" 
               size="icon" 
-              className="h-8 w-8 text-jira-gray-500 hover:text-jira-gray-700 hover:bg-jira-gray-100 relative"
+              className="h-8 w-8 text-jira-gray-500 hover:text-jira-gray-700 hover:bg-jira-gray-100 relative transition-colors"
               data-testid="button-notifications"
             >
               <Bell className="h-4 w-4" />
               {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full text-white text-[10px] flex items-center justify-center font-medium">
+                <span className="absolute -top-0.5 -right-0.5 h-4 w-4 bg-red-500 rounded-full text-white text-[10px] flex items-center justify-center font-medium">
                   {unreadCount}
                 </span>
               )}
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-96">
+          <DropdownMenuContent align="end" className="w-80 sm:w-96">
             <DropdownMenuLabel className="flex items-center justify-between">
               <span>Notifications</span>
               {unreadCount > 0 && (
@@ -302,13 +304,13 @@ export default function JiraHeader({ onMobileMenuToggle }: JiraHeaderProps) {
               )}
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <div className="max-h-96 overflow-y-auto">
+            <div className="max-h-[60vh] sm:max-h-96 overflow-y-auto">
               {mockNotifications.map(notification => {
                 const IconComponent = notification.icon;
                 return (
                   <DropdownMenuItem 
                     key={notification.id} 
-                    className={`p-3 cursor-pointer ${!notification.read ? 'bg-blue-50' : ''}`}
+                    className={`p-3 cursor-pointer transition-colors ${!notification.read ? 'bg-blue-50' : ''}`}
                     onClick={() => window.location.href = '/notifications'}
                   >
                     <div className="flex gap-3 w-full">
@@ -338,8 +340,8 @@ export default function JiraHeader({ onMobileMenuToggle }: JiraHeaderProps) {
         {/* User Avatar */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-8 w-8" data-testid="button-user-menu">
-              <Avatar className="h-6 w-6">
+            <Button variant="ghost" size="icon" className="h-8 w-8 transition-opacity hover:opacity-80" data-testid="button-user-menu">
+              <Avatar className="h-6 w-6 sm:h-7 sm:w-7">
                 <AvatarImage src={currentUser.avatarUrl} alt={currentUser.name} />
                 <AvatarFallback className="bg-jira-blue text-white text-xs font-medium">
                   {currentUser.initials}

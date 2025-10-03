@@ -222,7 +222,7 @@ export default function KanbanBoard({ columns: initialColumns, onIssueMove, onIs
   ];
 
   return (
-    <div className="flex-1 overflow-x-auto overflow-y-auto" data-testid="kanban-board">
+    <div className="flex-1 overflow-x-auto overflow-y-auto pb-4" data-testid="kanban-board">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -230,9 +230,9 @@ export default function KanbanBoard({ columns: initialColumns, onIssueMove, onIs
         onDragEnd={handleDragEnd}
       >
         <SortableContext items={sortableIds} strategy={verticalListSortingStrategy}>
-          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 lg:space-x-6 min-h-full sm:min-w-max">
+          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 lg:space-x-6 min-h-full md:min-w-max px-2 md:px-0">
             {initialColumns.map((column) => (
-              <div key={column.id} className="flex-shrink-0 w-full sm:w-72 lg:w-80 max-w-full">
+              <div key={column.id} className="flex-shrink-0 w-full md:w-72 lg:w-80 max-w-full">
                 <KanbanColumnComponent
                   column={column}
                   onAddIssue={handleAddIssue}

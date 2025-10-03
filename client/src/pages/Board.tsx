@@ -257,18 +257,18 @@ export default function Board() {
   };
 
   return (
-    <div className="min-h-screen bg-jira-gray-50 flex flex-col overflow-x-hidden">
+    <div className="min-h-screen bg-jira-gray-50 flex flex-col overflow-hidden">
       <JiraHeader 
         onMobileMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       />
       
-      <div className="flex flex-1 overflow-x-hidden">
+      <div className="flex flex-1 overflow-hidden">
         <JiraSidebar 
           isMobileMenuOpen={isMobileMenuOpen}
           onMobileMenuClose={() => setIsMobileMenuOpen(false)}
         />
         
-        <main className="flex-1 flex flex-col overflow-x-hidden">
+        <main className="flex-1 flex flex-col overflow-hidden">
           <BoardHeader 
             onSearch={handleBoardSearch}
             onFilterChange={handleFilterChange}
@@ -278,55 +278,56 @@ export default function Board() {
           />
           
           <div className="flex-1 overflow-y-auto">
-            <div className="">
+            <div className="md:p-4">
               {activeSprints.map((sprint) => {
                 const isExpanded = expandedSprints[sprint.id];
                 const sprintColumns = getColumnsForSprint(sprint);
                 const totalIssues = sprintColumns.reduce((sum, col) => sum + col.issues.length, 0);
                 
                 return (
-                  <div key={sprint.id} className="bg-white border border-jira-gray-200">
+                  <div key={sprint.id} className="bg-white border-b md:border md:border-jira-gray-200 md:rounded-lg md:mb-4 overflow-hidden">
                     {/* Sprint Header */}
                     <div 
-                      className="p-4 border-b border-jira-gray-200 cursor-pointer hover:bg-jira-gray-50 transition-colors"
+                      className="p-3 sm:p-4 border-b border-jira-gray-200 cursor-pointer hover:bg-jira-gray-50 active:bg-jira-gray-100 transition-colors"
                       onClick={() => toggleSprintExpansion(sprint.id)}
+                      data-testid={`sprint-header-${sprint.id}`}
                     >
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-3">
+                        <div className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0">
                           {isExpanded ? (
-                            <ChevronDown className="h-5 w-5 text-jira-gray-500" />
+                            <ChevronDown className="h-5 w-5 text-jira-gray-500 flex-shrink-0" />
                           ) : (
-                            <ChevronRight className="h-5 w-5 text-jira-gray-500" />
+                            <ChevronRight className="h-5 w-5 text-jira-gray-500 flex-shrink-0" />
                           )}
-                          <div>
-                            <h3 className="text-lg font-semibold text-jira-gray-900">
+                          <div className="flex-1 min-w-0">
+                            <h3 className="text-base sm:text-lg font-semibold text-jira-gray-900 truncate">
                               {sprint.name}
                             </h3>
-                            <div className="flex items-center space-x-4 text-sm text-jira-gray-500 mt-1">
+                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:text-sm text-jira-gray-500 mt-1">
                               <div className="flex items-center space-x-1">
-                                <Calendar className="h-4 w-4" />
-                                <span>
+                                <Calendar className="h-3 w-3 sm:h-4 sm:w-4" />
+                                <span className="truncate">
                                   {sprint.startDate ? new Date(sprint.startDate).toLocaleDateString() : 'TBD'} - 
                                   {sprint.endDate === 'Current' ? ' Current' : (sprint.endDate ? new Date(sprint.endDate).toLocaleDateString() : 'TBD')}
                                 </span>
                               </div>
                               <div className="flex items-center space-x-1">
-                                <Target className="h-4 w-4" />
+                                <Target className="h-3 w-3 sm:h-4 sm:w-4" />
                                 <span>{totalIssues} issues</span>
                               </div>
                             </div>
                           </div>
                         </div>
-                        <div className="flex items-center space-x-2">
-                          <Badge variant="outline" className="bg-green-100 text-green-800 border-green-200">
+                        <div className="flex items-center space-x-2 flex-shrink-0 ml-2">
+                          <Badge variant="outline" className="bg-green-100 text-green-800 border-green-200 text-xs">
                             Active
                           </Badge>
                         </div>
                       </div>
                       
                       {sprint.goal && (
-                        <div className="mt-3 p-3 bg-blue-50 border-l-4 border-blue-400 rounded">
-                          <p className="text-sm text-blue-900">
+                        <div className="mt-3 p-2 sm:p-3 bg-blue-50 border-l-4 border-blue-400 rounded">
+                          <p className="text-xs sm:text-sm text-blue-900">
                             <span className="font-medium">Sprint Goal:</span> {sprint.goal}
                           </p>
                         </div>
@@ -335,7 +336,7 @@ export default function Board() {
                     
                     {/* Sprint Content */}
                     {isExpanded && (
-                      <div className="p-4">
+                      <div className="p-2 sm:p-4">
                         <KanbanBoard 
                           columns={sprintColumns}
                           onIssueMove={handleIssueMove}

@@ -34,8 +34,8 @@ function SidebarItem({
     <Button
       variant="ghost"
       onClick={hasSubmenu ? onToggle : onClick}
-      className={`w-full justify-start px-3 py-2 h-8 text-sm font-normal text-jira-gray-700 hover:bg-jira-gray-100 ${
-        isActive ? 'bg-jira-blue-light text-jira-blue border-r-2 border-jira-blue' : ''
+      className={`w-full justify-start px-3 py-2 h-9 sm:h-10 text-sm font-normal text-jira-gray-700 hover:bg-jira-gray-100 transition-all duration-150 ${
+        isActive ? 'bg-jira-blue-light text-jira-blue border-r-2 border-jira-blue font-medium' : ''
       }`}
       data-testid={testId}
       asChild={!!href && !hasSubmenu}
@@ -43,7 +43,7 @@ function SidebarItem({
       {href && !hasSubmenu ? (
         <Link href={href}>
           <div className="flex items-center justify-between w-full">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-3">
               {icon}
               <span className="text-left">{label}</span>
             </div>
@@ -51,7 +51,7 @@ function SidebarItem({
         </Link>
       ) : (
         <div className="flex items-center justify-between w-full">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-3">
             {icon}
             <span className="text-left">{label}</span>
           </div>
@@ -114,23 +114,23 @@ export default function JiraSidebar({ isMobileMenuOpen = false, onMobileMenuClos
       {/* Mobile overlay */}
       {isMobileMenuOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-40 sm:hidden"
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden animate-in fade-in duration-200"
           onClick={onMobileMenuClose}
         />
       )}
       
-      <aside className={`fixed sm:relative w-64 bg-white border-r border-jira-gray-200 min-h-screen overflow-y-auto transition-transform duration-300 z-50 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} sm:translate-x-0 sm:block`}>
+      <aside className={`fixed lg:relative w-64 sm:w-72 lg:w-64 bg-white border-r border-jira-gray-200 h-screen overflow-y-auto transition-transform duration-300 ease-in-out z-50 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0`}>
       {/* Project Header */}
-      <div className="p-4 border-b border-jira-gray-200">
+      <div className="p-3 sm:p-4 border-b border-jira-gray-200 bg-jira-gray-50">
         <div className="flex items-center space-x-3">
-          <Avatar className="h-8 w-8">
+          <Avatar className="h-9 w-9 sm:h-10 sm:w-10">
             <AvatarImage src={currentProject.avatarUrl || '/assets/jira-logo.jpg'} alt={currentProject.name} />
             <AvatarFallback className="bg-jira-blue text-white text-sm font-medium">
               {currentProject.key.substring(0, 2)}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
-            <h2 className="text-sm font-medium text-jira-gray-900 truncate" data-testid="text-project-name">
+            <h2 className="text-sm font-semibold text-jira-gray-900 truncate" data-testid="text-project-name">
               {currentProject.name}
             </h2>
             <p className="text-xs text-jira-gray-500" data-testid="text-project-type">
@@ -141,11 +141,11 @@ export default function JiraSidebar({ isMobileMenuOpen = false, onMobileMenuClos
       </div>
 
       {/* Navigation Menu */}
-      <nav className="p-2 space-y-1">
+      <nav className="p-2 sm:p-3 space-y-1">
         {/* Planning */}
         <div className="mb-4">
-          <div className="px-2 py-1 mb-2">
-            <span className="text-xs font-semibold text-jira-gray-500 uppercase tracking-wide">
+          <div className="px-2 py-2 mb-1">
+            <span className="text-xs font-semibold text-jira-gray-500 uppercase tracking-wider">
               Planning
             </span>
           </div>
@@ -174,8 +174,8 @@ export default function JiraSidebar({ isMobileMenuOpen = false, onMobileMenuClos
 
         {/* Development */}
         <div className="mb-4">
-          <div className="px-2 py-1 mb-2">
-            <span className="text-xs font-semibold text-jira-gray-500 uppercase tracking-wide">
+          <div className="px-2 py-2 mb-1">
+            <span className="text-xs font-semibold text-jira-gray-500 uppercase tracking-wider">
               Development
             </span>
           </div>
@@ -216,7 +216,7 @@ export default function JiraSidebar({ isMobileMenuOpen = false, onMobileMenuClos
 
 
         {/* Project Settings */}
-        <div className="pt-4 border-t border-jira-gray-200">
+        <div className="pt-4 mt-4 border-t border-jira-gray-200">
           <SidebarItem
             icon={<Settings className="h-4 w-4" />}
             label="Project settings"

@@ -15,54 +15,22 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { mockUsers } from '@/data/mockData';
 import { formatDistanceToNow } from 'date-fns';
+import { useNotifications } from '@/contexts/NotificationContext';
 
 interface JiraHeaderProps {
   onMobileMenuToggle?: () => void;
 }
 
-const mockNotifications = [
-  {
-    id: '1',
-    type: 'comment',
-    title: 'New comment on PROJ-1',
-    message: 'Mike Chen commented: "Started working on the Google OAuth integration"',
-    time: '2 hours ago',
-    read: false,
-    icon: MessageSquare,
-  },
-  {
-    id: '2',
-    type: 'pr',
-    title: 'Pull request approved',
-    message: 'Your pull request #42 has been approved by Sarah Johnson',
-    time: '5 hours ago',
-    read: false,
-    icon: GitPullRequest,
-  },
-
-  {
-    id: '4',
-    type: 'complete',
-    title: 'Issue completed',
-    message: 'PROJ-2 was moved to Done by Jessica Williams',
-    time: '2 days ago',
-    read: true,
-    icon: CheckCircle,
-  },
-];
-
 export default function JiraHeader({ onMobileMenuToggle }: JiraHeaderProps) {
   const currentUser = mockUsers[0]; // todo: remove mock functionality
   const [searchQuery, setSearchQuery] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
+  const { notifications, unreadCount } = useNotifications();
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     setSearchOpen(query.length > 0);
   };
-
-
-  const unreadCount = mockNotifications.filter(n => !n.read).length;
 
   const allSearchItems = [
     // Sidebar Pages
@@ -305,7 +273,7 @@ export default function JiraHeader({ onMobileMenuToggle }: JiraHeaderProps) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <div className="max-h-[60vh] sm:max-h-96 overflow-y-auto">
-              {mockNotifications.map(notification => {
+              {notifications.slice(0, 5).map(notification => {
                 const IconComponent = notification.icon;
                 return (
                   <DropdownMenuItem 

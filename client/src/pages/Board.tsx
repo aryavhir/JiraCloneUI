@@ -295,9 +295,9 @@ export default function Board() {
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2 sm:space-x-3 flex-1 min-w-0">
                           {isExpanded ? (
-                            <ChevronDown className="h-5 w-5 text-jira-gray-500 flex-shrink-0" />
+                            <ChevronDown className="h-5 w-5 text-jira-gray-500 flex-shrink-0 transition-transform duration-200" />
                           ) : (
-                            <ChevronRight className="h-5 w-5 text-jira-gray-500 flex-shrink-0" />
+                            <ChevronRight className="h-5 w-5 text-jira-gray-500 flex-shrink-0 transition-transform duration-200" />
                           )}
                           <div className="flex-1 min-w-0">
                             <h3 className="text-base sm:text-lg font-semibold text-jira-gray-900 truncate">
@@ -336,7 +336,7 @@ export default function Board() {
                     
                     {/* Sprint Content */}
                     {isExpanded && (
-                      <div className="p-2 sm:p-4">
+                      <div className="p-2 sm:p-4 animate-in slide-in-from-top-2 duration-200">
                         <KanbanBoard 
                           columns={sprintColumns}
                           onIssueMove={handleIssueMove}

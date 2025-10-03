@@ -77,10 +77,10 @@ export default function Dashboard() {
           </Avatar>
           <div>
             <h1 className="text-xl sm:text-2xl font-bold" data-testid="text-dashboard-title">
-              Welcome back, {currentUser.name}!
+              Aryavhir Koul
             </h1>
             <p className="text-sm sm:text-base text-muted-foreground">
-              Full Stack Developer & Blockchain Enthusiast
+              Full Stack Developer & Blockchain Enthusiast | SDE @ Hydro Online
             </p>
           </div>
         </div>

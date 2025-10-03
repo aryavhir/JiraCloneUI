@@ -16,6 +16,8 @@ export interface JiraProject {
   category: string;
   type: 'software' | 'business';
   avatarUrl?: string;
+  githubUrl?: string;
+  ProjectUrl?: string;
 }
 
 export type IssueType = 'story' | 'bug' | 'task' | 'epic';

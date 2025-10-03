@@ -45,39 +45,79 @@ const quarters2026 = [
 const initialEpics: Epic[] = [
   {
     id: '1',
-    key: 'PROJ-100',
-    summary: 'User Authentication System',
-    startDate: '2024-01-01',
-    endDate: '2024-03-31',
-    progress: 75,
-    status: 'in-progress',
-    issues: mockIssues.slice(0, 3),
+    key: 'Q2-2024',
+    summary: 'Completed Bachelor\'s in Information Technology',
+    startDate: '2024-04-01',
+    endDate: '2024-06-30',
+    progress: 100,
+    status: 'completed',
+    issues: [],
   },
   {
     id: '2',
-    key: 'PROJ-101',
-    summary: 'Dashboard Redesign',
-    startDate: '2024-02-15',
-    endDate: '2024-05-30',
-    progress: 30,
-    status: 'in-progress',
-    issues: mockIssues.slice(1, 3),
+    key: 'Q3-2024',
+    summary: 'Joined Hydro Online as Full Stack Developer',
+    startDate: '2024-07-01',
+    endDate: '2024-09-30',
+    progress: 100,
+    status: 'completed',
+    issues: [],
   },
   {
     id: '3',
-    key: 'PROJ-102',
-    summary: 'API Performance Optimization',
-    startDate: '2024-04-01',
-    endDate: '2024-06-30',
+    key: 'Q4-2024',
+    summary: 'OpenRTB JS Development',
+    startDate: '2024-10-01',
+    endDate: '2024-12-31',
+    progress: 85,
+    status: 'in-progress',
+    issues: [],
+  },
+  {
+    id: '4',
+    key: 'Q1-2025',
+    summary: 'Hydro Online Main Site & Payment Infrastructure',
+    startDate: '2025-01-01',
+    endDate: '2025-03-31',
     progress: 0,
     status: 'planned',
-    issues: mockIssues.slice(3, 5),
+    issues: [],
+  },
+  {
+    id: '5',
+    key: 'Q2-2025',
+    summary: 'Decentralized File Transfer System',
+    startDate: '2025-04-01',
+    endDate: '2025-06-30',
+    progress: 0,
+    status: 'planned',
+    issues: [],
+  },
+  {
+    id: '6',
+    key: 'Q3-2025',
+    summary: 'Active Interviewing & Career Opportunities',
+    startDate: '2025-07-01',
+    endDate: '2025-09-30',
+    progress: 0,
+    status: 'planned',
+    issues: [],
+  },
+  {
+    id: '7',
+    key: 'Q1-2026',
+    summary: 'Jr. Penetration Tester Certification',
+    startDate: '2026-01-01',
+    endDate: '2026-03-31',
+    progress: 0,
+    status: 'planned',
+    issues: [],
   },
 ];
 
 export default function Roadmap() {
   const currentProject = mockProjects[0];
-  const [selectedYear, setSelectedYear] = useState(2024);
+  const [selectedYear, setSelectedYear] = useState(2025);
   const [epics, setEpics] = useState<Epic[]>(initialEpics);
   const [showCreateEpic, setShowCreateEpic] = useState(false);
   const [newEpic, setNewEpic] = useState({
@@ -158,8 +198,8 @@ export default function Roadmap() {
             <div className="px-6 py-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h1 className="text-2xl font-semibold text-jira-gray-900">Roadmap</h1>
-                  <p className="text-sm text-jira-gray-500 mt-1">{currentProject.name}</p>
+                  <h1 className="text-2xl font-semibold text-jira-gray-900">Career Roadmap</h1>
+                  <p className="text-sm text-jira-gray-500 mt-1">My career journey from graduation to current role at Hydro Online and future plans</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <Button variant="outline" size="sm">

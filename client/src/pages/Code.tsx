@@ -37,50 +37,91 @@ interface PullRequest {
 const initialRepositories: Repository[] = [
   {
     id: '1',
-    name: 'frontend',
-    description: 'Main frontend application repository',
-    branches: 12,
+    name: 'Frontend',
+    description: 'Frontend repository for this project',
+    branches: 3,
     pullRequests: 3,
     lastCommit: '2 hours ago',
-    githubUrl: 'https://github.com/example/frontend',
+    githubUrl: 'https://github.com/aryavhir/JiraCloneUI',
   },
   {
     id: '2',
-    name: 'backend-api',
-    description: 'RESTful API backend service',
+    name: 'Portfolio-Website',
+    description: 'Portfolio website for showcasing projects',
     branches: 8,
-    pullRequests: 1,
-    lastCommit: '5 hours ago',
-    githubUrl: 'https://github.com/example/backend-api',
+    pullRequests: 13,
+    lastCommit: '21 hours ago',
+    githubUrl: 'https://github.com/aryavhir/portfolio-resume',
+  },
+    {
+    id: '2',
+    name: 'AI-studio',
+    description: 'AI-powered design tool for converting images to web pages',
+    branches: 8,
+    pullRequests: 11,
+    lastCommit: '20 days ago',
+    githubUrl: 'https://github.com/aryavhir/AI-studio',
+  },
+
+    {
+    id: '2',
+    name: 'Video to site ',
+    description: 'Converting a video for project to a 1-1 webpage',
+    branches: 8,
+    pullRequests: 23,
+    lastCommit: '13 days ago',
+    githubUrl: 'https://github.com/aryavhir/project-getdots.in',
+  },
+      {
+    id: '2',
+    name: 'Google-Cybersecurity-Professional-Certificate-coursera',
+    description: 'Portfolio exercises for Google Cybersecurity Professional Certificate (credly)',
+    branches: 8,
+    pullRequests: 19,
+    lastCommit: '1 month ago',
+    githubUrl: 'https://github.com/aryavhir/Google-Cybersecurity-Professional-Certificate-coursera-',
   },
 ];
 
 const initialPullRequests: PullRequest[] = [
   {
     id: '1',
-    title: 'Add user authentication flow',
+    title: 'Add react memoization and the Enhance keyboard navigation',
+    number: 16,
+    author: mockUsers[1],
+    status: 'merged',
+    branch: 'feature/testing-libraries',
+    targetBranch: 'dev',
+    createdAt: '2 months ago',
+    comments: 1,
+    approvals: 2,
+    githubUrl: 'https://github.com/aryavhir/AI-studio/pull/4',
+  },
+   {
+    id: '1',
+    title: 'fixing-deployment isssue',
+    number: 12,
+    author: mockUsers[1],
+    status: 'merged',
+    branch: 'bugs/fix-vercel-deploy',
+    targetBranch: 'main',
+    createdAt: '5 days ago',
+    comments: 2,
+    approvals: 2,
+    githubUrl: 'https://github.com/aryavhir/AI-studio/pull/10',
+  },
+    {
+    id: '1',
+    title: 'pr-dev-to-stage-final-draft ',
     number: 42,
     author: mockUsers[1],
-    status: 'open',
+    status: 'closed',
     branch: 'feature/auth-flow',
     targetBranch: 'main',
-    createdAt: '2 days ago',
-    comments: 5,
-    approvals: 2,
-    githubUrl: 'https://github.com/example/frontend/pull/42',
-  },
-  {
-    id: '2',
-    title: 'Fix database connection timeout',
-    number: 41,
-    author: mockUsers[3],
-    status: 'open',
-    branch: 'fix/db-timeout',
-    targetBranch: 'main',
-    createdAt: '1 day ago',
-    comments: 3,
+    createdAt: '22 days ago',
+    comments: 4,
     approvals: 1,
-    githubUrl: 'https://github.com/example/backend-api/pull/41',
+    githubUrl: 'https://github.com/aryavhir/project-getdots.in/pull/2',
   },
 ];
 
@@ -154,7 +195,7 @@ export default function Code() {
           <div className="flex-1 px-6 py-6">
             <div className="mb-8">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-medium text-jira-gray-900">Repositories</h2>
+                <h2 className="text-lg font-medium text-jira-gray-900">Top Repositories</h2>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-jira-gray-400 h-4 w-4" />
                   <Input

@@ -533,7 +533,7 @@ export default function ProjectSettings() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <div className="flex items-center gap-3">
-              <div className="h-12 w-12 rounded-full bg-red-100 flex items-center justify-center">
+              <div className="h-12 w-18 rounded-full bg-red-100 flex items-center justify-center">
                 <AlertTriangle className="h-6 w-6 text-red-600" />
               </div>
               <div>

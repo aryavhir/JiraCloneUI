@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, Bell, HelpCircle, Settings, Plus, MessageSquare, GitPullRequest, CheckCircle, AlertCircle } from 'lucide-react';
+import { Search, Bell, HelpCircle, Settings, Plus, MessageSquare, GitPullRequest, CheckCircle, AlertCircle, Menu } from 'lucide-react';
 import { Link } from 'wouter';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,7 +17,7 @@ import { mockUsers } from '@/data/mockData';
 import { formatDistanceToNow } from 'date-fns';
 
 interface JiraHeaderProps {
-  onCreateIssue?: () => void;
+  onMobileMenuToggle?: () => void;
 }
 
 const mockNotifications = [
@@ -39,15 +39,7 @@ const mockNotifications = [
     read: false,
     icon: GitPullRequest,
   },
-  {
-    id: '3',
-    type: 'issue',
-    title: 'Issue assigned to you',
-    message: 'PROJ-3 "Database connection timeout" was assigned to you',
-    time: '1 day ago',
-    read: true,
-    icon: AlertCircle,
-  },
+
   {
     id: '4',
     type: 'complete',
@@ -59,7 +51,7 @@ const mockNotifications = [
   },
 ];
 
-export default function JiraHeader({ onCreateIssue }: JiraHeaderProps) {
+export default function JiraHeader({ onMobileMenuToggle }: JiraHeaderProps) {
   const currentUser = mockUsers[0]; // todo: remove mock functionality
   const [searchQuery, setSearchQuery] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
@@ -69,76 +61,147 @@ export default function JiraHeader({ onCreateIssue }: JiraHeaderProps) {
     setSearchOpen(query.length > 0);
   };
 
-  const handleProfileClick = () => {
-    console.log('Profile clicked');
-  };
 
   const unreadCount = mockNotifications.filter(n => !n.read).length;
 
-  const searchResults = searchQuery.length > 0 ? [
-    { type: 'issue', key: 'PROJ-1', title: 'Set up user authentication system', category: 'Issues' },
-    { type: 'issue', key: 'PROJ-2', title: 'Design dashboard wireframes', category: 'Issues' },
-    { type: 'issue', key: 'PROJ-3', title: 'Database connection timeout', category: 'Issues' },
+  const allSearchItems = [
+    // Sidebar Pages
+    { type: 'page', title: 'Roadmap', path: '/roadmap', category: 'Pages' },
     { type: 'page', title: 'Backlog', path: '/backlog', category: 'Pages' },
-    { type: 'page', title: 'Board', path: '/board', category: 'Pages' },
+    { type: 'page', title: 'Active Sprints', path: '/board', category: 'Pages' },
+    { type: 'page', title: 'Code', path: '/code', category: 'Pages' },
     { type: 'page', title: 'Releases', path: '/releases', category: 'Pages' },
-  ].filter(item => 
+    { type: 'page', title: 'Projects', path: '/projects', category: 'Pages' },
+    { type: 'page', title: 'Project Settings', path: '/settings', category: 'Pages' },
+    
+    // Topbar Pages
+    { type: 'page', title: 'Your Work', path: '/your-work', category: 'Pages' },
+    { type: 'page', title: 'Dashboard', path: '/dashboard', category: 'Pages' },
+    { type: 'page', title: 'Teams', path: '/teams', category: 'Pages' },
+    { type: 'page', title: 'Filters', path: '/filters', category: 'Pages' },
+    { type: 'page', title: 'Notifications', path: '/notifications', category: 'Pages' },
+    { type: 'page', title: 'Help', path: '/help', category: 'Pages' },
+    
+    // Issues
+    { type: 'issue', key: 'PROJ-1', title: 'Set up user authentication system', category: 'Issues', path: '/board' },
+    { type: 'issue', key: 'PROJ-2', title: 'Design dashboard wireframes', category: 'Issues', path: '/board' },
+  ];
+
+  const searchResults = searchQuery.length > 0 ? allSearchItems.filter(item => 
     item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     ('key' in item && item.key && item.key.toLowerCase().includes(searchQuery.toLowerCase()))
   ) : [];
 
   return (
-    <header className="h-14 bg-white border-b border-jira-gray-200 flex items-center justify-between px-4 relative z-50">
+    <header className="h-14 bg-white border-b border-jira-gray-200 flex items-center justify-between px-2 sm:px-4 relative z-50">
       {/* Left section */}
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-2 sm:space-x-4 flex-1">
+        {/* Mobile menu button */}
+        <Button
+          variant="ghost"
+          size="sm"
+          className="sm:hidden h-8 w-8 p-0"
+          onClick={onMobileMenuToggle}
+        >
+          <Menu className="h-4 w-4" />
+        </Button>
+
         {/* Jira Logo */}
-        <div className="flex items-center space-x-2">
-          <div className="w-6 h-6 bg-jira-blue rounded-sm flex items-center justify-center">
-            <span className="text-white font-bold text-sm">J</span>
+        <Link href="/">
+          <div className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity">
+            <img 
+              src="/assets/jira-logo.jpg" 
+              alt="Jira" 
+              className="w-6 h-6 rounded object-cover"
+            />
+            <span className="font-semibold text-jira-gray-800">Jira</span>
           </div>
-          <span className="font-semibold text-jira-gray-800">Jira</span>
+        </Link>
+
+        {/* Global Search Bar */}
+        <div className="flex-1 max-w-md mx-2 sm:mx-8">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-jira-gray-400 h-4 w-4" />
+            <Input
+              type="search"
+              placeholder="Search..."
+              className="hidden sm:block pl-10 pr-4 py-2 w-full h-9 bg-jira-gray-50 border-jira-gray-200 focus:border-jira-blue focus:ring-jira-blue focus:bg-white text-sm"
+              value={searchQuery}
+              onChange={(e) => handleSearch(e.target.value)}
+              onFocus={() => searchQuery && setSearchOpen(true)}
+              data-testid="input-global-search"
+            />
+            {/* Mobile search icon */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="sm:hidden h-8 w-8 p-0"
+              onClick={() => setSearchOpen(!searchOpen)}
+            >
+              <Search className="h-4 w-4" />
+            </Button>
+            {searchOpen && searchResults.length > 0 && (
+              <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-jira-gray-200 rounded-md shadow-lg max-h-96 overflow-y-auto z-50">
+                {searchResults.map((result, idx) => (
+                  <div key={idx}>
+                    {idx === 0 && (
+                      <div className="px-3 py-2 text-xs font-semibold text-jira-gray-500 uppercase">
+                        {result.category}
+                      </div>
+                    )}
+                    {idx > 0 && searchResults[idx - 1].category !== result.category && (
+                      <div className="px-3 py-2 text-xs font-semibold text-jira-gray-500 uppercase border-t border-jira-gray-200">
+                        {result.category}
+                      </div>
+                    )}
+                    <Link 
+                      href={result.type === 'page' ? result.path : '/board'}
+                      onClick={() => setSearchOpen(false)}
+                    >
+                      <div className="px-3 py-2 hover:bg-jira-gray-50 cursor-pointer">
+                        <div className="text-sm text-jira-gray-900">{result.title}</div>
+                        {'key' in result && result.key && (
+                          <div className="text-xs text-jira-gray-500">{result.key}</div>
+                        )}
+                      </div>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Navigation */}
-        <nav className="hidden md:flex items-center space-x-6 ml-8">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="text-jira-gray-700 hover:text-jira-blue hover:bg-jira-blue-light">
-                Your work
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-64">
-              <DropdownMenuLabel>Your work</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link href="/your-work" className="w-full">Worked on</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/your-work" className="w-full">Viewed</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/your-work" className="w-full">Assigned to me</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/your-work" className="w-full">Starred</Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+        <nav className="hidden md:flex items-center space-x-6">
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="text-jira-gray-700 hover:text-jira-blue hover:bg-jira-blue-light">
-                Projects
+              <span className="gradient-text text-sm">Projects</span>
+
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-64">
               <DropdownMenuLabel>Recent projects</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
-                <Link href="/board" className="w-full">Project Management Tool</Link>
+                <a 
+  href="https://aryavhir.in" 
+  target="_blank" 
+  rel="noopener noreferrer" 
+  className="w-full"
+>
+  Portfolio-Website
+</a>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/board" className="w-full">Website Redesign</Link>
+                 <a 
+  href="https://modelia-project.vercel.app/" 
+  target="_blank" 
+  rel="noopener noreferrer" 
+  className="w-full"
+>AI-studio</a>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="text-jira-blue" asChild>
@@ -156,6 +219,7 @@ export default function JiraHeader({ onCreateIssue }: JiraHeaderProps) {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="sm" className="text-jira-gray-700 hover:text-jira-blue hover:bg-jira-blue-light">
+                  
                 Teams
               </Button>
             </DropdownMenuTrigger>
@@ -177,6 +241,7 @@ export default function JiraHeader({ onCreateIssue }: JiraHeaderProps) {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          
         </nav>
       </div>
 
@@ -241,7 +306,11 @@ export default function JiraHeader({ onCreateIssue }: JiraHeaderProps) {
               {mockNotifications.map(notification => {
                 const IconComponent = notification.icon;
                 return (
-                  <DropdownMenuItem key={notification.id} className={`p-3 cursor-pointer ${!notification.read ? 'bg-blue-50' : ''}`}>
+                  <DropdownMenuItem 
+                    key={notification.id} 
+                    className={`p-3 cursor-pointer ${!notification.read ? 'bg-blue-50' : ''}`}
+                    onClick={() => window.location.href = '/notifications'}
+                  >
                     <div className="flex gap-3 w-full">
                       <IconComponent className="h-5 w-5 text-jira-gray-500 flex-shrink-0 mt-0.5" />
                       <div className="flex-1 min-w-0">
@@ -288,9 +357,7 @@ export default function JiraHeader({ onCreateIssue }: JiraHeaderProps) {
               </p>
             </div>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleProfileClick}>
-              Profile
-            </DropdownMenuItem>
+            
             <DropdownMenuItem asChild>
               <Link href="/settings" className="w-full">Settings</Link>
             </DropdownMenuItem>

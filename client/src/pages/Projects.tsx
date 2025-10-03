@@ -1,6 +1,6 @@
 import JiraHeader from '@/components/JiraHeader';
 import JiraSidebar from '@/components/JiraSidebar';
-import { Folder, Plus, Star, Clock, Users } from 'lucide-react';
+import { Folder, Plus, Star, Clock, Users, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -45,7 +45,7 @@ export default function Projects() {
                 </TabsTrigger>
                 <TabsTrigger value="starred" data-testid="tab-starred">
                   <Star className="h-4 w-4 mr-2" />
-                  Starred
+                  Current
                 </TabsTrigger>
                 <TabsTrigger value="all" data-testid="tab-all">
                   <Folder className="h-4 w-4 mr-2" />
@@ -64,9 +64,12 @@ export default function Projects() {
                         <CardHeader>
                           <div className="flex items-start justify-between">
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-jira-blue rounded flex items-center justify-center">
-                                <span className="text-white font-bold text-sm">{project.key}</span>
-                              </div>
+                              <Avatar className="w-10 h-10">
+                                <AvatarImage src={project.avatarUrl || '/assets/jira-logo.jpg'} alt={project.name} />
+                                <AvatarFallback className="bg-jira-blue text-white font-bold text-sm">
+                                  {project.key}
+                                </AvatarFallback>
+                              </Avatar>
                               <div>
                                 <CardTitle className="text-lg">{project.name}</CardTitle>
                                 <CardDescription className="text-xs">
@@ -107,11 +110,12 @@ export default function Projects() {
                               </Avatar>
                               <span className="text-xs text-jira-gray-600">{project.lead.name}</span>
                             </div>
-                            <Link href="/board">
+                            <a href={project.ProjectUrl || '/board'} target={project.ProjectUrl ? '_blank' : '_self'} rel="noopener noreferrer">
                               <Button variant="outline" size="sm" data-testid={`button-view-${project.key}`}>
-                                View Board
+                                {project.ProjectUrl && <ExternalLink className="h-4 w-4 mr-1" />}
+                                {project.ProjectUrl ? 'View Project' : 'View Board'}
                               </Button>
-                            </Link>
+                            </a>
                           </div>
                         </CardContent>
                       </Card>
@@ -140,9 +144,12 @@ export default function Projects() {
                           <CardHeader>
                             <div className="flex items-start justify-between">
                               <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 bg-jira-blue rounded flex items-center justify-center">
-                                  <span className="text-white font-bold text-sm">{project.key}</span>
-                                </div>
+                                <Avatar className="w-10 h-10">
+                                  <AvatarImage src={project.avatarUrl || '/assets/jira-logo.jpg'} alt={project.name} />
+                                  <AvatarFallback className="bg-jira-blue text-white font-bold text-sm">
+                                    {project.key}
+                                  </AvatarFallback>
+                                </Avatar>
                                 <div>
                                   <CardTitle className="text-lg">{project.name}</CardTitle>
                                   <CardDescription className="text-xs">
@@ -183,11 +190,12 @@ export default function Projects() {
                                 </Avatar>
                                 <span className="text-xs text-jira-gray-600">{project.lead.name}</span>
                               </div>
-                              <Link href="/board">
+                              <a href={project.ProjectUrl || '/board'} target={project.ProjectUrl ? '_blank' : '_self'} rel="noopener noreferrer">
                                 <Button variant="outline" size="sm">
-                                  View Board
+                                  {project.ProjectUrl && <ExternalLink className="h-4 w-4 mr-1" />}
+                                  {project.ProjectUrl ? 'View Project' : 'View Board'}
                                 </Button>
-                              </Link>
+                              </a>
                             </div>
                           </CardContent>
                         </Card>
@@ -208,9 +216,12 @@ export default function Projects() {
                         <CardHeader>
                           <div className="flex items-start justify-between">
                             <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-jira-blue rounded flex items-center justify-center">
-                                <span className="text-white font-bold text-sm">{project.key}</span>
-                              </div>
+                              <Avatar className="w-10 h-10">
+                                <AvatarImage src={project.avatarUrl || '/assets/jira-logo.jpg'} alt={project.name} />
+                                <AvatarFallback className="bg-jira-blue text-white font-bold text-sm">
+                                  {project.key}
+                                </AvatarFallback>
+                              </Avatar>
                               <div>
                                 <CardTitle className="text-lg">{project.name}</CardTitle>
                                 <CardDescription className="text-xs">
@@ -251,11 +262,12 @@ export default function Projects() {
                               </Avatar>
                               <span className="text-xs text-jira-gray-600">{project.lead.name}</span>
                             </div>
-                            <Link href="/board">
+                            <a href={project.ProjectUrl || '/board'} target={project.ProjectUrl ? '_blank' : '_self'} rel="noopener noreferrer">
                               <Button variant="outline" size="sm">
-                                View Board
+                                {project.ProjectUrl && <ExternalLink className="h-4 w-4 mr-1" />}
+                                {project.ProjectUrl ? 'View Project' : 'View Board'}
                               </Button>
-                            </Link>
+                            </a>
                           </div>
                         </CardContent>
                       </Card>

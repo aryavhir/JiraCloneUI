@@ -1,65 +1,72 @@
 import JiraHeader from '@/components/JiraHeader';
 import JiraSidebar from '@/components/JiraSidebar';
-import { HelpCircle, Book, Video, MessageCircle, FileText, ExternalLink, Search } from 'lucide-react';
+import { HelpCircle, Book, Video, MessageCircle, FileText, ExternalLink, Search, Settings } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useState } from 'react';
+import { resetStartupOverlay } from '@/utils/startup';
 
 const helpTopics = [
   {
     id: '1',
-    category: 'Getting Started',
+    category: 'About Aryavhir Koul',
     icon: Book,
     articles: [
-      { title: 'Quick Start Guide', description: 'Get up and running with Jira in minutes' },
-      { title: 'Creating Your First Project', description: 'Learn how to set up a new project' },
-      { title: 'Inviting Team Members', description: 'Add collaborators to your project' },
-      { title: 'Understanding Issue Types', description: 'Stories, bugs, tasks, and epics explained' },
+      { title: 'Professional Background', description: 'Learn about Aryavhir\'s experience as a Software Development Engineer at Hydro Online' },
+      { title: 'Cybersecurity Expertise', description: 'Google Cybersecurity Certificate and TryHackMe training achievements' },
+      { title: 'Technical Skills', description: 'Full-stack development, blockchain, and security technologies' },
+      { title: 'Personal Projects', description: 'Portfolio of 15+ deployed websites and open-source contributions' },
     ],
   },
   {
     id: '2',
-    category: 'Issues & Workflows',
+    category: 'Current Work at Hydro Online',
     icon: FileText,
     articles: [
-      { title: 'Creating and Managing Issues', description: 'Work with issues effectively' },
-      { title: 'Workflow Customization', description: 'Tailor workflows to your process' },
-      { title: 'Using Issue Filters', description: 'Find and organize issues quickly' },
-      { title: 'Agile Board Setup', description: 'Configure your Kanban or Scrum board' },
+      { title: 'AdTech Platform Development', description: 'OpenRTB compliant JavaScript ad banners with real-time tracking' },
+      { title: 'Campaign Management Portal', description: 'React.js, Go, and TypeScript based advertiser dashboard' },
+      { title: 'Publisher Rewards System', description: 'Automated compensation calculation and payment processing' },
+      { title: 'Crypto Payment Integration', description: 'MetaMask, MoonPay, and PayPal payment solutions' },
     ],
   },
   {
     id: '3',
-    category: 'Collaboration',
+    category: 'Cybersecurity Projects',
     icon: MessageCircle,
     articles: [
-      { title: 'Comments and Mentions', description: 'Communicate with your team' },
-      { title: 'Notifications Settings', description: 'Stay informed without overwhelm' },
-      { title: 'Sharing and Permissions', description: 'Control who sees what' },
-      { title: 'Integration with Other Tools', description: 'Connect Jira to your workflow' },
+      { title: 'Security Audits & Assessments', description: 'Vulnerability scanning and compliance verification projects' },
+      { title: 'Incident Response Training', description: 'Simulated data breach scenarios and recovery procedures' },
+      { title: 'Blockchain Security', description: 'Smart contract audits and DeFi protocol assessments' },
+      { title: 'Security Tool Development', description: 'Open-source tools for automated vulnerability scanning' },
     ],
   },
 ];
 
 const popularResources = [
   {
-    title: 'Video Tutorials',
-    description: 'Watch step-by-step guides for common tasks',
-    icon: Video,
-    link: '#',
+    title: 'Portfolio Website',
+    description: 'Visit aryavhir.in to see all projects and achievements',
+    icon: ExternalLink,
+    link: 'https://aryavhir.in'
   },
   {
-    title: 'Community Forum',
-    description: 'Get help from other Jira users',
-    icon: MessageCircle,
-    link: '#',
+    title: 'GitHub Profile',
+    description: 'Explore open-source contributions and project repositories',
+    icon: ExternalLink,
+    link: 'https://github.com/aryavhir'
   },
   {
-    title: 'API Documentation',
-    description: 'Integrate and extend Jira functionality',
-    icon: Book,
-    link: '#',
+    title: 'LinkedIn Profile',
+    description: 'Connect professionally and view career updates',
+    icon: ExternalLink,
+    link: 'https://linkedin.com/in/Aryavhir koul'
+  },
+  {
+    title: 'Cybersecurity Certificates',
+    description: 'View Google Cybersecurity Certificate and other achievements',
+    icon: ExternalLink,
+    link: 'https://github.com/aryavhir/Google-Cybersecurity-Professional-Certificate-coursera-'
   },
 ];
 
@@ -77,13 +84,15 @@ export default function Help() {
           <div className="max-w-6xl mx-auto p-6">
             <div className="mb-8 text-center">
               <div className="flex items-center justify-center gap-3 mb-4">
-                <HelpCircle className="h-8 w-8 text-jira-blue" />
+                <div className="p-3 bg-jira-blue-light rounded-full">
+                  <HelpCircle className="h-8 w-8 text-jira-blue" />
+                </div>
                 <h1 className="text-3xl font-semibold text-jira-gray-900" data-testid="text-help-title">
-                  Help Center
+                  About Aryavhir Koul
                 </h1>
               </div>
-              <p className="text-jira-gray-600 mb-6">
-                Find answers, learn best practices, and get the most out of Jira
+              <p className="text-lg text-jira-gray-600 max-w-2xl mx-auto">
+                Learn about Aryavhir's professional journey, technical expertise, and current projects in cybersecurity and full-stack development.
               </p>
 
               <div className="max-w-2xl mx-auto relative">
@@ -179,6 +188,36 @@ export default function Help() {
                   <Button variant="outline" data-testid="button-community">
                     Join Community
                   </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Developer Section */}
+            <Card className="mt-8 border-orange-200 bg-orange-50">
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <Settings className="h-6 w-6 text-orange-600" />
+                  <CardTitle className="text-orange-800">Developer Tools</CardTitle>
+                </div>
+                <CardDescription className="text-orange-700">
+                  Tools for developers and testing
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-medium text-orange-800 mb-2">Startup Overlay</h4>
+                    <p className="text-sm text-orange-700 mb-3">
+                      Reset the startup overlay to see it again. This is useful for testing or if you want to see the welcome tour again.
+                    </p>
+                    <Button 
+                      onClick={resetStartupOverlay}
+                      variant="outline"
+                      className="border-orange-300 text-orange-700 hover:bg-orange-100"
+                    >
+                      Reset Startup Overlay
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>

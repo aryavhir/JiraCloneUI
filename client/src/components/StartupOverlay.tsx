@@ -43,7 +43,7 @@ export default function StartupOverlay({ onComplete }: StartupOverlayProps) {
             <div className="py-4 sm:py-8">
               <div className="flex justify-center mb-4 sm:mb-6">
                 <img 
-                  src="/assets/jira-logo.jpg" 
+                  src="/assets/jira-logo.png" 
                   alt="Jira" 
                   className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg object-cover"
                 />

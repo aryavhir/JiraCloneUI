@@ -35,7 +35,7 @@ export const mockProjects: JiraProject[] = [
     lead: mockUsers[0],
     category: 'Development',
     type: 'software',
-    avatarUrl: '/assets/jira-logo.jpg',
+    avatarUrl: '/assets/jira-logo.png',
     githubUrl: 'https://github.com/aryavhir/JiraCloneUI',
     ProjectUrl: ''
   },

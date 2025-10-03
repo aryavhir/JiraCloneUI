@@ -65,7 +65,7 @@ export default function Projects() {
                           <div className="flex items-start justify-between">
                             <div className="flex items-center gap-3">
                               <Avatar className="w-10 h-10">
-                                <AvatarImage src={project.avatarUrl || '/assets/jira-logo.jpg'} alt={project.name} />
+                                <AvatarImage src={project.avatarUrl || '/assets/jira-logo.png'} alt={project.name} />
                                 <AvatarFallback className="bg-jira-blue text-white font-bold text-sm">
                                   {project.key}
                                 </AvatarFallback>
@@ -145,7 +145,7 @@ export default function Projects() {
                             <div className="flex items-start justify-between">
                               <div className="flex items-center gap-3">
                                 <Avatar className="w-10 h-10">
-                                  <AvatarImage src={project.avatarUrl || '/assets/jira-logo.jpg'} alt={project.name} />
+                                  <AvatarImage src={project.avatarUrl || '/assets/jira-logo.png'} alt={project.name} />
                                   <AvatarFallback className="bg-jira-blue text-white font-bold text-sm">
                                     {project.key}
                                   </AvatarFallback>
@@ -217,7 +217,7 @@ export default function Projects() {
                           <div className="flex items-start justify-between">
                             <div className="flex items-center gap-3">
                               <Avatar className="w-10 h-10">
-                                <AvatarImage src={project.avatarUrl || '/assets/jira-logo.jpg'} alt={project.name} />
+                                <AvatarImage src={project.avatarUrl || '/assets/jira-logo.png'} alt={project.name} />
                                 <AvatarFallback className="bg-jira-blue text-white font-bold text-sm">
                                   {project.key}
                                 </AvatarFallback>

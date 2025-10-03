@@ -124,7 +124,7 @@ export default function JiraSidebar({ isMobileMenuOpen = false, onMobileMenuClos
       <div className="p-3 sm:p-4 border-b border-jira-gray-200 bg-jira-gray-50">
         <div className="flex items-center space-x-3">
           <Avatar className="h-9 w-9 sm:h-10 sm:w-10">
-            <AvatarImage src={currentProject.avatarUrl || '/assets/jira-logo.jpg'} alt={currentProject.name} />
+            <AvatarImage src={currentProject.avatarUrl || '/assets/jira-logo.png'} alt={currentProject.name} />
             <AvatarFallback className="bg-jira-blue text-white text-sm font-medium">
               {currentProject.key.substring(0, 2)}
             </AvatarFallback>

@@ -79,7 +79,7 @@ export default function JiraHeader({ onMobileMenuToggle }: JiraHeaderProps) {
         <Link href="/">
           <div className="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition-opacity flex-shrink-0">
             <img 
-              src="/assets/jira-logo.jpg" 
+              src="/assets/jira-logo.png" 
               alt="Jira" 
               className="w-6 h-6 sm:w-7 sm:h-7 rounded object-cover"
             />
